@@ -81,15 +81,13 @@ function Form({
         }
       }
       const nextURL = `${pathname}?${sp}`;
-      console.log({ nextURL });
       router.replace(nextURL);
     } else if (sp.get("type")) {
       sp.delete("type");
       const nextURL = `${pathname}?${sp}`;
-      console.log({ nextURL });
       router.replace(nextURL);
     }
-  }, [searchType]);
+  }, [searchType, pathname, router, searchParams]);
 
   const searched = useSearch(Boolean(debouncedSearch.trim()), debouncedSearch, {
     searchType,
@@ -117,12 +115,9 @@ function Form({
         onChange={(e) => setSearch(e.target.value)}
       />
 
-      {/* Make a grid here */}
-
       <div className="grid">
         <div>
           <fieldset>
-            {/* <legend>Size</legend> */}
             <label htmlFor="type_multi">
               <input
                 type="radio"
