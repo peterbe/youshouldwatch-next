@@ -1,0 +1,87 @@
+name: Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - uses: pnpm/action-setup@v2
+        name: Install pnpm
+        id: pnpm-install
+        with:
+          version: 7
+          run_install: false
+
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+
+      - uses: actions/cache@v3
+        name: Setup pnpm cache
+        with:
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install dependencies
+        run: pnpm install
+
+    # steps:
+    #   - name: Check out repo
+    #     uses: actions/checkout@v3
+
+    #   - name: Setup node
+    #     uses: actions/setup-node@v3
+    #     with:
+    #       # With v17, as of Nov 2021, you get
+    #       # Error: error:0308010C:digital envelope routines::unsupported
+    #       node-version: 16
+    #       cache: npm
+
+    #   - uses: pnpm/action-setup@v2
+
+      - name: Run lint
+        run: npm run lint
+
+      - name: Run build script
+        run: npm run build
+
+    #   - name: Start
+    #     env:
+    #       PORT: 3000
+    #     run: |
+    #       npm run serve > /tmp/stdout.log 2> /tmp/stderr.log &
+
+    #   - name: Check that the server started
+    #     run: curl --retry-connrefused --retry 3 -I http://localhost:3000/
+
+    #   # - name: View the home page
+    #   #   run: |
+
+    #   #     curl -v --fail http://localhost:3000/
+    #   #     # XXX Some Playright or jest tests?
+    #   #     curl --fail http://localhost:3000/foo/bar
+
+    #   # - name: Debug any server outputs
+    #   #   if: failure()
+    #   #   run: |
+    #   #     echo "____STDOUT____"
+    #   #     cat /tmp/stdout.log
+    #   #     echo "____STDERR____"
+    #   #     cat /tmp/stderr.log
