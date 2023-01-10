@@ -1,2 +1,5 @@
 /.next
 /.github
+pnpm-lock.yaml
+next.config.js
+.vscode/settings.json
