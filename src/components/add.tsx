@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import { useDebounce, useSearch } from "../app/hooks";
@@ -53,24 +54,42 @@ function Form({
   languages: Languages;
   setFound: (x: string) => void;
 }) {
-  const [search, setSearch] = useState("");
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const initialSearch = searchParams.get("search");
+  const [search, setSearch] = useState(initialSearch || "");
   const debouncedSearch = useDebounce(search);
-  const [searchType, setSearchType] = useState<"" | "movie" | "tv">("");
+  const initialSearchType = searchParams.get("type");
+  const [searchType, setSearchType] = useState<"" | "movie" | "tv">(
+    initialSearchType === "movie" || initialSearchType === "tv"
+      ? initialSearchType
+      : ""
+  );
   const [region, setRegion] = useState("");
   const [language, setLanguage] = useState("");
 
-  // const {
-  //   status: genrestatus,
-  //   data: genres,
-  //   error: genresError,
-  //   // isFetching,
-  //   // isLoading: isLoadingConfig,
-  // } = useGenres();
-
-  //   const isLoadingDebounced = useDebounce(!!config);
-  //   console.log({ isLoading, isLoadingDebounced, isLoadingConfig, isFetching });
-
-  //   console.log({ isReady });
+  useEffect(() => {
+    const sp = new URLSearchParams(searchParams);
+    if (searchType) {
+      if (sp.get("type") !== searchType) {
+        if (sp.get("type") && !searchType) {
+          sp.delete("type");
+        } else {
+          sp.set("type", searchType);
+        }
+      }
+      const nextURL = `${pathname}?${sp}`;
+      console.log({ nextURL });
+      router.replace(nextURL);
+    } else if (sp.get("type")) {
+      sp.delete("type");
+      const nextURL = `${pathname}?${sp}`;
+      console.log({ nextURL });
+      router.replace(nextURL);
+    }
+  }, [searchType]);
 
   const searched = useSearch(Boolean(debouncedSearch.trim()), debouncedSearch, {
     searchType,
@@ -79,7 +98,16 @@ function Form({
   });
 
   return (
-    <form>
+    <form
+      onSubmit={(event) => {
+        event.preventDefault();
+        const sp = new URLSearchParams({ search });
+        if (searchType) {
+          sp.set("type", searchType);
+        }
+        router.push(`${pathname}?${sp}`);
+      }}
+    >
       <input
         type="search"
         id="search"
