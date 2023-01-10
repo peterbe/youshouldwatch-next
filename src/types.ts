@@ -1,3 +1,5 @@
+export type MediaType = "movie" | "tv";
+
 export type Config = {
   change_keys: string[];
   images: {
@@ -96,36 +98,37 @@ type _SpokenLanguage = {
   name: string;
 };
 
-type MediaData = Genres & {
+export type MediaDetails = Genres & {
   id: number;
+  name: string;
   backdrop_path: string | null;
   poster_path: string | null;
   adult: boolean;
   belongs_to_collection: null | _Collection;
   budget?: number;
-  homepage?: string;
-  imdb_id?: string;
+  homepage: string | null;
+  imdb_id: string | null;
 
   original_language: string;
   original_title: string;
-  overview: string;
+  overview: string | null;
   popularity: number;
   production_companies: _ProductionCompany[];
   production_countries: _ProductionCountry[];
   release_date: string;
   revenue?: number;
-  runtime?: number;
+  runtime: number | null;
   spoken_languages: _SpokenLanguage[];
   status: string;
 
-  tagline?: string;
-  title: string;
+  tagline: string | null;
+  title?: string;
 
   video: boolean;
   vote_average?: number;
   vote_count?: number;
 };
 
-export type MovieData = MediaData & {};
+export type MovieData = MediaDetails & {};
 
-export type TVData = MediaData & {};
+export type TVData = MediaDetails & {};

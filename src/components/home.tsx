@@ -1,3 +1,5 @@
+"use client";
+
 import { font } from "./font";
 
 export function Home() {

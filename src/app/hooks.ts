@@ -48,17 +48,17 @@ export function useGenres() {
 export function useSearch(
   isEnabled: boolean,
   query: string,
-  searchType: string = "",
-  region: string = ""
+  { searchType = "", language = "", region = "" } = {}
 ) {
   return useQuery({
-    queryKey: ["search", query, searchType, region],
+    queryKey: ["search", query, searchType, region, language],
     queryFn: async () => {
       const { data } = await axios.get<SearchResults>(
         `/api/themoviedb/search?${new URLSearchParams({
           query,
           searchType,
           region,
+          language,
         })}`
       );
       return data;

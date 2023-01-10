@@ -1,8 +1,10 @@
-"use client";
-
+import { notFound } from "next/navigation";
 import { Share } from "../../../../components/share";
 
-export default function Page({
+import type { MediaType } from "../../../../types";
+import { getConfig, getDetails } from "../../../../lib/themoviedb";
+
+export default async function Page({
   params,
 }: {
   params: {
@@ -10,5 +12,25 @@ export default function Page({
     id: string;
   };
 }) {
-  return <Share />;
+  console.log("PARAMS", params);
+
+  if (!(params.type === "movie" || params.type === "tv")) {
+    return notFound();
+  }
+  const mediaType: MediaType = params.type;
+  const id = parseInt(params.id);
+  if (!Number.isInteger(id) || id < 0) {
+    return notFound();
+  }
+
+  // const config = await getConfig();
+  // const details = await getDetails(mediaType, id);
+  const [config, details] = await Promise.all([
+    getConfig(),
+    getDetails(mediaType, id),
+  ]);
+
+  return (
+    <Share mediaType={mediaType} id={id} config={config} details={details} />
+  );
 }
