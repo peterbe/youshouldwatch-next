@@ -58,7 +58,7 @@ jobs:
         env:
           PORT: 3000
         run: |
-          pnpm run serve > /tmp/stdout.log 2> /tmp/stderr.log &
+          pnpm run start > /tmp/stdout.log 2> /tmp/stderr.log &
 
       - name: Check that the server started
         run: curl --retry-connrefused --retry 3 -I http://localhost:3000/
