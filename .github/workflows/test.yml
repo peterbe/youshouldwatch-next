@@ -42,25 +42,14 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-    # steps:
-    #   - name: Check out repo
-    #     uses: actions/checkout@v3
-
-    #   - name: Setup node
-    #     uses: actions/setup-node@v3
-    #     with:
-    #       # With v17, as of Nov 2021, you get
-    #       # Error: error:0308010C:digital envelope routines::unsupported
-    #       node-version: 16
-    #       cache: npm
-
-    #   - uses: pnpm/action-setup@v2
+      - name: Pretty?
+        run: pnpm run prettier:check
 
       - name: Run lint
-        run: npm run lint
+        run: pnpm run lint
 
       - name: Run build script
-        run: npm run build
+        run: pnpm run build
 
     #   - name: Start
     #     env:
