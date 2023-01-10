@@ -6,6 +6,9 @@ on:
       - main
   pull_request:
 
+env:
+  THEMOVIEDB_API_KEY: ${{ secrets.THEMOVIEDB_API_KEY }}
+
 jobs:
   test:
     runs-on: ubuntu-latest
