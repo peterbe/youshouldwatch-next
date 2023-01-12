@@ -65,8 +65,13 @@ jobs:
 
       - name: View the home page
         run: |
-
           curl -v --fail http://localhost:3000/
+
+      - name: Install Playwright Browsers
+        run: pnpm dlx playwright install --with-deps
+
+      - name: Run Playwright tests
+        run: pnpm dlx playwright test
 
       - name: Debug any server outputs
         if: failure()

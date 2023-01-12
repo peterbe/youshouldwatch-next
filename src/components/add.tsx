@@ -113,6 +113,7 @@ function Form({
         placeholder="Type name of movie or TV show"
         value={search}
         onChange={(e) => setSearch(e.target.value)}
+        data-testid="add-search"
       />
 
       <div className="grid">
@@ -222,7 +223,11 @@ function Result({
       <button>Add to my list</button>
       <br />
 
-      <Link href={`/share/${mediaType}/${result.id}`} role="button">
+      <Link
+        href={`/share/${mediaType}/${result.id}`}
+        role="button"
+        data-testid="share-link"
+      >
         Share
       </Link>
       {/* </footer> */}
