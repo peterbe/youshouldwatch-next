@@ -65,8 +65,10 @@ jobs:
 
       - name: View the home page
         run: |
-
           curl -v --fail http://localhost:3000/
+
+      - name: Run Playwright tests
+        run: pnpm dlx playwright test
 
       - name: Debug any server outputs
         if: failure()

@@ -29,7 +29,7 @@ export default function RootLayout({
             </ul>
             <ul>
               <li>
-                <Link href="/add" role="button">
+                <Link href="/add" role="button" data-testid="nav-add">
                   + Add
                 </Link>
               </li>

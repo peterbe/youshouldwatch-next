@@ -35,3 +35,7 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 favicon_package_v0.16
+/test-results/
+/playwright-report/
+/playwright/.cache/
+tests-examples/
