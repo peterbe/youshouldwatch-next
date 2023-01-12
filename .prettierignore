@@ -3,3 +3,4 @@
 pnpm-lock.yaml
 next.config.js
 .vscode/settings.json
+favicon_package*
