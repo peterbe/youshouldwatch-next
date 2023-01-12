@@ -28,7 +28,7 @@ type Props = {
 export function Add({ config, genres, languages }: Props) {
   return (
     <div>
-      <h2 className={font.className}>Add</h2>
+      <h2 className={font.className}>Add/Find</h2>
       <QueryClientProvider client={queryClient}>
         <Form
           config={config}

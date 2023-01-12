@@ -12,8 +12,6 @@ export default async function Page({
     id: string;
   };
 }) {
-  console.log("PARAMS", params);
-
   if (!(params.type === "movie" || params.type === "tv")) {
     return notFound();
   }
@@ -23,8 +21,6 @@ export default async function Page({
     return notFound();
   }
 
-  // const config = await getConfig();
-  // const details = await getDetails(mediaType, id);
   const [config, details] = await Promise.all([
     getConfig(),
     getDetails(mediaType, id),
