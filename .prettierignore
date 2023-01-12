@@ -4,3 +4,5 @@ pnpm-lock.yaml
 next.config.js
 .vscode/settings.json
 favicon_package*
+tests-examples/demo-todo-app.spec.ts
+playwright-report/index.html
