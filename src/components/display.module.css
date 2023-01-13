@@ -1,0 +1,15 @@
+.facts {
+  margin-top: 70px;
+}
+.facts p {
+  font-size: 0.8rem;
+  margin-bottom: 1rem;
+}
+.facts p b {
+  padding-right: 10px;
+}
+
+.years_ago {
+  padding-left: 5px;
+  font-style: italic;
+}

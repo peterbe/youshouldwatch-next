@@ -13,6 +13,9 @@ start: build
 pretty:
     pnpm run prettier:check
 
+format:
+    pnpm run prettier:write
+
 lint: pretty
     pnpm run lint
 
