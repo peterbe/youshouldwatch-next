@@ -16,5 +16,5 @@ pretty:
 lint: pretty
     pnpm run lint
 
-headlesstest:
+test:
     pnpm dlx playwright test

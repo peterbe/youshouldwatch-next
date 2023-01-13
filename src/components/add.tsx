@@ -1,21 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
+
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import { useDebounce, useSearch } from "../app/hooks";
-import type {
-  Config,
-  Genre,
-  SearchResults,
-  SearchResult,
-  Languages,
-} from "../types";
+import type { Config, Genre, Languages } from "../types";
 
 import { font } from "./font";
-import { PosterImage } from "./poster-image";
+import { DisplaySearchResults } from "./display-search-result";
 
 const queryClient = new QueryClient();
 
@@ -30,14 +24,7 @@ export function Add({ config, genres, languages }: Props) {
     <div>
       <h2 className={font.className}>Add/Find</h2>
       <QueryClientProvider client={queryClient}>
-        <Form
-          config={config}
-          genres={genres}
-          languages={languages}
-          setFound={(found: string) => {
-            console.log("FOUND:", found);
-          }}
-        />
+        <Form config={config} genres={genres} languages={languages} />
       </QueryClientProvider>
     </div>
   );
@@ -47,12 +34,10 @@ function Form({
   config,
   genres,
   languages,
-  setFound,
 }: {
   config: Config;
   genres: Genre;
   languages: Languages;
-  setFound: (x: string) => void;
 }) {
   const router = useRouter();
   const pathname = usePathname();
@@ -181,56 +166,5 @@ function Form({
         <DisplaySearchResults data={searched.data} config={config} />
       )}
     </form>
-  );
-}
-
-function DisplaySearchResults({
-  data,
-  config,
-}: {
-  data: SearchResults;
-  config: Config;
-}) {
-  return (
-    <div>
-      <p>Found {data.total_results.toLocaleString()} results</p>
-      {data.results.map((result, i) => (
-        <Result key={result.id} result={result} index={i} config={config} />
-      ))}
-    </div>
-  );
-}
-
-function Result({
-  result,
-  index,
-  config,
-}: {
-  result: SearchResult;
-  index: number;
-  config: Config;
-}) {
-  const mediaType = result.media_type === "movie" ? "movie" : "tv";
-
-  return (
-    <article>
-      {/* <header> */}
-      <h3 className={font.className}>{result.title || result.name}</h3>
-      {/* </header> */}
-
-      <PosterImage index={index} result={result} config={config} />
-      {/* <footer> */}
-      <button>Add to my list</button>
-      <br />
-
-      <Link
-        href={`/share/${mediaType}/${result.id}`}
-        role="button"
-        data-testid="share-link"
-      >
-        Share
-      </Link>
-      {/* </footer> */}
-    </article>
   );
 }

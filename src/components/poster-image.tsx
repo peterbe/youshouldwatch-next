@@ -55,10 +55,10 @@ export function PosterImage({
   return (
     <Image
       // className={styles.logo}
-      src="/camera.svg"
+      src="/watching.svg"
       alt="Has no poster image"
-      width={100}
-      height={100}
+      width={500}
+      height={400}
       // priority
     />
   );
