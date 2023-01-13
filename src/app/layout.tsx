@@ -1,47 +1,32 @@
-import Link from "next/link";
 import "@picocss/pico/css/pico.min.css";
+// import { getConfig } from "../lib/themoviedb";
 
-// import "@picocss/pico/scss/pico.scss";
+import FirebaseProvider from "./firebase-provider";
+import { Nav } from "./nav";
 // import './globals.css'
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  // const config = await getConfig();
+
+  // XXX consider fetching config here and putting it into a context
+  // along with languages
+
   return (
     // <html data-theme="light">
     <html lang="en">
-      {/*
-        <head /> will contain the components returned by the nearest parent
-        head.tsx. Find out more at https://beta.nextjs.org/docs/api-reference/file-conventions/head
-      */}
       <head />
       <body>
-        <main className="container">
-          <nav>
-            <ul>
-              <li>
-                <Link href="/">
-                  <strong>Home</strong>
-                </Link>
-              </li>
-            </ul>
-            <ul>
-              <li>
-                <Link href="/add" role="button" data-testid="nav-add">
-                  + Add
-                </Link>
-              </li>
-              <li>
-                <a href="#" role="button">
-                  Button
-                </a>
-              </li>
-            </ul>
-          </nav>
-          {children}
-        </main>
+        <FirebaseProvider>
+          <main className="container">
+            <Nav />
+
+            {children}
+          </main>
+        </FirebaseProvider>
       </body>
     </html>
   );
