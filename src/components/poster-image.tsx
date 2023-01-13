@@ -53,13 +53,14 @@ export function PosterImage({
   }
 
   return (
-    <Image
-      // className={styles.logo}
-      src="/watching.svg"
-      alt="Has no poster image"
-      width={500}
-      height={400}
-      // priority
-    />
+    <span>
+      <Image
+        src="/watching.svg"
+        alt="Has no poster image"
+        width={300}
+        height={200}
+      />
+      <i>{"Has no poster :("}</i>
+    </span>
   );
 }
