@@ -51,6 +51,13 @@ jobs:
       - name: Run lint
         run: pnpm run lint
 
+      - name: Cache Next build
+        uses: actions/cache@v3
+        with:
+          path: ${{ github.workspace }}/.next/cache
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: ${{ runner.os }}-nextjs-
+
       - name: Run build script
         run: pnpm run build
 
@@ -67,6 +74,8 @@ jobs:
         run: |
           curl -v --fail http://localhost:3000/
 
+      # If you're NOT going to use `--project="Google Chrome"` when running
+      # the Playwright tests, uncomment these lines. They're very slow
       # - name: Install Playwright Browsers
       #   run: pnpm dlx playwright install --with-deps
 
