@@ -25,15 +25,15 @@ export type SearchResult = {
   media_type: string; // should it be 'movie' | 'tvshow' ...
   original_language: string;
   original_title: string;
-  overview: string;
+  overview: string | null;
   popularity: number;
   poster_path: string | null;
   release_date: string;
   title?: string; // movies
   name?: string; // tv
   video: boolean;
-  vote_average: number;
-  vote_count: number;
+  vote_average: number | null;
+  vote_count: number | null;
   first_air_date?: string;
 };
 
