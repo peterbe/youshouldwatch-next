@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { Share } from "../../../../components/share";
 
 import type { MediaType } from "../../../../types";
-import { getConfig, getDetails } from "../../../../lib/themoviedb";
+import { getConfig, getDetails, getGenres } from "../../../../lib/themoviedb";
 
 export default async function Page({
   params,
@@ -21,12 +21,19 @@ export default async function Page({
     return notFound();
   }
 
-  const [config, details] = await Promise.all([
+  const [config, genres, details] = await Promise.all([
     getConfig(),
+    getGenres(),
     getDetails(mediaType, id),
   ]);
 
   return (
-    <Share mediaType={mediaType} id={id} config={config} details={details} />
+    <Share
+      mediaType={mediaType}
+      id={id}
+      config={config}
+      details={details}
+      genres={genres}
+    />
   );
 }
