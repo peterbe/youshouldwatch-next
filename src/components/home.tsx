@@ -23,7 +23,7 @@ export function Home({ config, genres, languages }: Props) {
           <i>You currently have no movies or shows on your list</i>
         </p>
       ) : (
-        <ShowList results={list} config={config} />
+        <ShowList results={list} config={config} genres={genres} />
       )}
 
       {/* <b>DB:</b>
@@ -35,9 +35,11 @@ export function Home({ config, genres, languages }: Props) {
 function ShowList({
   results,
   config,
+  genres,
 }: {
   results: SearchResult[];
   config: Config;
+  genres: Genre;
 }) {
   return (
     <div>
@@ -47,6 +49,7 @@ function ShowList({
           index={i}
           config={config}
           result={result}
+          genres={genres}
         />
       ))}
     </div>

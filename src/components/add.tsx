@@ -163,7 +163,11 @@ function Form({
       {/* {isLoading && <article aria-busy="true">Loading</article>} */}
 
       {searched.status === "success" && searched.data && config && (
-        <DisplaySearchResults data={searched.data} config={config} />
+        <DisplaySearchResults
+          data={searched.data}
+          config={config}
+          genres={genres}
+        />
       )}
     </form>
   );

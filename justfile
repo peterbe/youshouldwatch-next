@@ -16,7 +16,10 @@ pretty:
 format:
     pnpm run prettier:write
 
-lint: pretty
+tsc:
+    pnpm run tsc
+
+lint: pretty tsc
     pnpm run lint
 
 test:
