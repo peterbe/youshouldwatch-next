@@ -98,7 +98,11 @@ jobs:
       #   run: pnpm dlx playwright install --with-deps
 
       - name: Run Playwright tests
-        run: pnpm dlx playwright test --project="Google Chrome"
+        run: |
+          set -e
+          pnpm dlx playwright test --project="Google Chrome"
+
+          echo $?
 
       - name: Debug any server outputs
         if: failure()
