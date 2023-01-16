@@ -52,6 +52,12 @@ export function Facts({
             <span>{result.original_title}</span>
           </p>
         )}
+
+      {result.adult && (
+        <p>
+          <b>Adult</b>
+        </p>
+      )}
     </div>
   );
 }

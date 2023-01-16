@@ -7,6 +7,8 @@ import styles from "./nav.module.css";
 
 export function Nav() {
   const { user, list } = useContext(FirebaseContext);
+  if (user) console.log({ "user.photoURL": user.photoURL });
+
   return (
     <nav>
       <ul>
@@ -41,7 +43,7 @@ export function Nav() {
           )}
 
           {user && !user.photoURL && (
-            <Link href="/signin" role="button" data-testid="nav-auth">
+            <Link href="/signin" role="button" data-testid="nav-signed-in">
               Signed in
             </Link>
           )}

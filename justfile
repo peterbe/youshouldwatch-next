@@ -24,3 +24,6 @@ lint: pretty tsc
 
 test:
     pnpm dlx playwright test
+
+emulate:
+    pnpm run emulate
