@@ -8,6 +8,7 @@ on:
 
 env:
   THEMOVIEDB_API_KEY: ${{ secrets.THEMOVIEDB_API_KEY }}
+  NEXT_PUBLIC_EMULATE_FIREBASE: true
 
 jobs:
   test:
@@ -45,6 +46,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
+      - name: Start Firebase emulator in the background
+        run: firebase emulators:start &
+
       - name: Pretty?
         run: pnpm run prettier:check
 
@@ -72,6 +76,17 @@ jobs:
 
       - name: Check that the server started
         run: curl --retry-connrefused --retry 3 -I http://localhost:3000/
+
+      - name: Wait for emulators
+        run: |
+          set -e
+
+          echo "Show emulator home"
+          curl --retry-connrefused --retry 6 http://localhost:4000
+          echo "View Auth emulator home"
+          curl --fail http://localhost:4000/auth
+          echo "View Firestore emulator home"
+          curl --fail http://localhost:4000/firestore
 
       - name: View the home page
         run: |

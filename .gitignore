@@ -39,3 +39,6 @@ favicon_package_v0.16
 /playwright-report/
 /playwright/.cache/
 tests-examples/
+firestore-debug.log
+ui-debug.log
+firebase-debug.log

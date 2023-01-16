@@ -1,5 +1,8 @@
+import type { Page } from "@playwright/test";
 import { test, expect } from "@playwright/test";
 const BASE_URL = process.env.BASE_URL || "http://localhost:3000";
+
+const PHOTO_URL = "http://localhost:3000/face.png";
 
 test("home page", async ({ page }) => {
   await page.goto(BASE_URL + "/");
@@ -43,4 +46,28 @@ test("search and add", async ({ page }) => {
   await expect(page).toHaveURL(BASE_URL + "/");
 
   await expect(page.getByText("The Departed").nth(0)).toBeVisible();
+});
+
+const googleAuth = async (page: Page) => {
+  await page.goto(BASE_URL + "/");
+  await page.getByTestId("nav-auth").nth(0).click();
+  await page.getByTestId("auth-google").click();
+  await page.getByText("Add new account").click();
+  await page.getByText("Auto-generate user information").click();
+  await page.locator("css=#profile-photo-input").fill(PHOTO_URL);
+  await page.getByText("Sign in with").click();
+
+  await expect(page).toHaveURL(BASE_URL + "/signin");
+  await expect(page.getByText("Signed in")).toBeVisible();
+};
+
+test("authenticate with Firebase emulator auth", async ({ page }) => {
+  await googleAuth(page);
+});
+
+test("auth and sign out", async ({ page }) => {
+  await googleAuth(page);
+  await page.goto(BASE_URL + "/signin");
+  await page.getByText("Sign out").click();
+  await expect(page.getByTestId("nav-auth")).toBeVisible();
 });

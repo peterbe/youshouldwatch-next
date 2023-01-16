@@ -43,6 +43,7 @@ export function SignIn() {
       {!user && (
         <div>
           <button
+            data-testid="auth-google"
             onClick={() => {
               if (auth) {
                 const provider = new GoogleAuthProvider();

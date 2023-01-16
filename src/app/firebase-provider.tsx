@@ -2,7 +2,11 @@
 import { createContext, useEffect, useState } from "react";
 import { initializeApp } from "firebase/app";
 import type { Firestore, Unsubscribe } from "firebase/firestore";
-import { getFirestore, onSnapshot } from "firebase/firestore";
+import {
+  getFirestore,
+  onSnapshot,
+  connectFirestoreEmulator,
+} from "firebase/firestore";
 import {
   collection,
   addDoc,
@@ -12,10 +16,20 @@ import {
   deleteDoc,
 } from "firebase/firestore";
 import type { Auth, User } from "firebase/auth";
-import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+import {
+  getAuth,
+  onAuthStateChanged,
+  signOut,
+  connectAuthEmulator,
+} from "firebase/auth";
 
 import type { SearchResult, StoredSearchResult } from "../types";
 import { rememberLastLogin } from "../components/utils";
+
+const EMULATE_FIREBASE = Boolean(
+  JSON.parse(process.env.NEXT_PUBLIC_EMULATE_FIREBASE || "false")
+);
+console.log({ EMULATE_FIREBASE });
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -64,9 +78,16 @@ export default function FirebaseProvider({
   useEffect(() => {
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
+    if (EMULATE_FIREBASE) {
+      connectFirestoreEmulator(db, "localhost", 8080);
+    }
     setDb(db);
 
-    setAuth(getAuth(app));
+    const auth = getAuth(app);
+    if (EMULATE_FIREBASE) {
+      connectAuthEmulator(auth, "http://localhost:9099");
+    }
+    setAuth(auth);
   }, []);
 
   const [user, setUser] = useState<User | false | null>(null);
