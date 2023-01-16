@@ -26,4 +26,4 @@ test:
     pnpm dlx playwright test
 
 emulate:
-    firebase emulators:start
+    pnpm run emulate
