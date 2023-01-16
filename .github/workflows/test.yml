@@ -104,8 +104,21 @@ jobs:
 
           echo $?
 
-      - name: Debug any server outputs
-        # if: failure()
+      # - uses: actions/upload-artifact@v3
+      #   # if: ${{ success() }}
+      #   with:
+      #     name: playwright-report
+      #     path: playwright-report/
+      #     retention-days: 10
+
+      # - uses: actions/upload-artifact@v3
+      #   if: ${{ failure() }}
+      #   with:
+      #     name: failure.png
+      #     path: failure.png
+      #     retention-days: 10
+
+      - name: Display any server outputs
         run: |
           echo "____STDOUT____"
           cat /tmp/stdout.log
