@@ -29,8 +29,9 @@ import { rememberLastLogin } from "../components/utils";
 const EMULATE_FIREBASE = Boolean(
   JSON.parse(process.env.NEXT_PUBLIC_EMULATE_FIREBASE || "false")
 );
-console.log({ EMULATE_FIREBASE });
-
+if (EMULATE_FIREBASE) {
+  console.warn("Running Firebase in emulator mode");
+}
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 

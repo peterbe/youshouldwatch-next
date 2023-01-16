@@ -1,5 +1,32 @@
 import type { Page } from "@playwright/test";
 import { test, expect } from "@playwright/test";
+
+// import type { TestInfo } from "@playwright/test";
+// export async function screenshotOnFailure(
+//   { page }: { page: Page },
+//   testInfo: TestInfo
+// ) {
+//   console.log({
+//     "testInfo.status": testInfo.status,
+//     "testInfo.expectedStatus": testInfo.expectedStatus,
+//   });
+
+//   if (testInfo.status !== testInfo.expectedStatus) {
+//     // Get a unique place for the screenshot.
+//     const screenshotPath = testInfo.outputPath(`failure.png`);
+//     // Add it to the report.
+//     testInfo.attachments.push({
+//       name: "screenshot",
+//       path: screenshotPath,
+//       contentType: "image/png",
+//     });
+//     // Take the screenshot itself.
+//     await page.screenshot({ path: screenshotPath, timeout: 5000 });
+//   }
+// }
+
+// test.afterEach(screenshotOnFailure);
+
 const BASE_URL = process.env.BASE_URL || "http://localhost:3000";
 
 const PHOTO_URL = "http://localhost:3000/face.png";
@@ -52,6 +79,9 @@ const googleAuth = async (page: Page) => {
   await page.goto(BASE_URL + "/");
   await page.getByTestId("nav-auth").nth(0).click();
   await page.getByTestId("auth-google").click();
+  await expect(page).toHaveURL(/emulator\/auth\/handler/);
+  const button = page.getByText("Add new account");
+  await expect(button).toBeVisible();
   await page.getByText("Add new account").click();
   await page.getByText("Auto-generate user information").click();
   await page.locator("css=#profile-photo-input").fill(PHOTO_URL);
@@ -63,6 +93,7 @@ const googleAuth = async (page: Page) => {
 
 test("authenticate with Firebase emulator auth", async ({ page }) => {
   await googleAuth(page);
+  await expect(page.getByTestId("nav-signed-in")).toBeVisible();
 });
 
 test("auth and sign out", async ({ page }) => {
