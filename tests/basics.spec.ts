@@ -75,22 +75,6 @@ test("search and add", async ({ page }) => {
   await expect(page.getByText("The Departed").nth(0)).toBeVisible();
 });
 
-const googleAuth = async (page: Page) => {
-  await page.goto(BASE_URL + "/");
-  await page.getByTestId("nav-auth").nth(0).click();
-  await page.getByTestId("auth-google").click();
-  await expect(page).toHaveURL(/emulator\/auth\/handler/);
-  const button = page.getByText("Add new account");
-  await expect(button).toBeVisible();
-  await page.getByText("Add new account").click();
-  await page.getByText("Auto-generate user information").click();
-  await page.locator("css=#profile-photo-input").fill(PHOTO_URL);
-  await page.getByText("Sign in with").click();
-
-  await expect(page).toHaveURL(BASE_URL + "/signin");
-  await expect(page.getByText("Signed in")).toBeVisible();
-};
-
 test("authenticate with Firebase emulator auth", async ({ page }) => {
   await googleAuth(page);
   await expect(page.getByTestId("nav-signed-in")).toBeVisible();
@@ -102,3 +86,26 @@ test("auth and sign out", async ({ page }) => {
   await page.getByText("Sign out").click();
   await expect(page.getByTestId("nav-auth")).toBeVisible();
 });
+
+async function googleAuth(page: Page) {
+  await page.goto(BASE_URL + "/");
+  await page.getByTestId("nav-auth").nth(0).click();
+  await page.getByTestId("auth-google").click();
+  await expect(page).toHaveURL(/emulator\/auth\/handler/);
+
+  const button = page.getByText("Add new account");
+  await expect(button).toBeVisible();
+
+  // This is important because sometimes even if the button is present,
+  // clicking on it might not do anything because the click event handler
+  // might not be ready. Ugh, something about the emulator auth UI is weird.
+  await page.waitForLoadState("networkidle");
+
+  await button.click();
+  await page.getByText("Auto-generate user information").click();
+  await page.locator("css=#profile-photo-input").fill(PHOTO_URL);
+  await page.getByText("Sign in with").click();
+
+  await expect(page).toHaveURL(BASE_URL + "/signin");
+  await expect(page.getByText("Signed in")).toBeVisible();
+}
