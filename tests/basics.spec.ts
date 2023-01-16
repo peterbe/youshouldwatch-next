@@ -63,6 +63,7 @@ const googleAuth = async (page: Page) => {
 
 test("authenticate with Firebase emulator auth", async ({ page }) => {
   await googleAuth(page);
+  await expect(page.getByTestId("nav-signed-in")).toBeVisible();
 });
 
 test("auth and sign out", async ({ page }) => {
