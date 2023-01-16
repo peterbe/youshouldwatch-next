@@ -1,9 +1,9 @@
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useContext } from "react";
-import { FirebaseContext } from "../app/firebase-provider";
+import { createRef, useContext, useEffect, useState } from "react";
+import party from "party-js";
 import type { Config, Genre, SearchResults, SearchResult } from "../types";
 
+import { FirebaseContext } from "../app/firebase-provider";
 import { font } from "./font";
 import { PosterImage } from "./poster-image";
 import { Facts } from "./display-facts";
@@ -45,37 +45,43 @@ export function DisplayResult({
   config: Config;
   genres: Genre;
 }) {
-  const router = useRouter();
+  // const router = useRouter();
   const mediaType = result.media_type === "movie" ? "movie" : "tv";
 
   const { list, addToList, removeFromList } = useContext(FirebaseContext);
 
-  const onListAlready = new Set(list.map((r) => r.id)).has(result.id);
+  const onListAlready = new Set(list.map((r) => r.result.id)).has(result.id);
 
   return (
     <article>
-      <div className="grid">
+      <DisplayMediaTypeIcon mediaType={result.media_type} />
+      <h2 className={font.className}>{result.title || result.name}</h2>
+      {/* <div className="grid">
         <div>
           <h2 className={font.className}>{result.title || result.name}</h2>
         </div>
         <div style={{ textAlign: "right" }}>
-          {/* {result.media_type} */}
           <DisplayMediaTypeIcon mediaType={result.media_type} />
         </div>
-      </div>
+      </div> */}
 
       <PosterImage index={index} result={result} config={config} />
 
       {(result.media_type == "movie" || result.media_type === "tv") && (
         <button
-          onClick={() => {
+          data-testid="display-toggle"
+          onClick={(event) => {
             if (onListAlready) {
               removeFromList(result);
             } else {
-              addToList(result);
+              addToList(result).then(() => {
+                party.confetti(event.target as HTMLElement, {
+                  count: 60,
+                  spread: party.variation.range(40, 50),
+                  speed: party.variation.range(500, 600),
+                });
+              });
             }
-            // XXX why does this not work?!
-            router.push("/");
           }}
         >
           {onListAlready ? "Remove from your list" : "Add to my list"}

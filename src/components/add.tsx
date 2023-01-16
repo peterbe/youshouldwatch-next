@@ -45,7 +45,7 @@ function Form({
 
   const initialSearch = searchParams.get("search");
   const [search, setSearch] = useState(initialSearch || "");
-  const debouncedSearch = useDebounce(search);
+  const debouncedSearch = useDebounce(search, 200);
   const initialSearchType = searchParams.get("type");
   const [searchType, setSearchType] = useState<"" | "movie" | "tv">(
     initialSearchType === "movie" || initialSearchType === "tv"

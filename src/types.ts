@@ -44,6 +44,13 @@ export type SearchResults = {
   total_results: number;
 };
 
+export type StoredSearchResult = {
+  id: string;
+  added: Date;
+  uid: string;
+  result: SearchResult;
+};
+
 export type Genre = {
   [key: number]: string;
 };

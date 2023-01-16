@@ -3,7 +3,7 @@ import { useContext } from "react";
 import { font } from "./font";
 import { FirebaseContext } from "../app/firebase-provider";
 import { DisplayResult } from "./display-search-result";
-import type { SearchResult, Config, Genre, Languages } from "../types";
+import type { StoredSearchResult, Config, Genre, Languages } from "../types";
 
 type Props = {
   config: Config;
@@ -12,22 +12,22 @@ type Props = {
 };
 
 export function Home({ config, genres, languages }: Props) {
-  const { list } = useContext(FirebaseContext);
+  const { list, isLoading } = useContext(FirebaseContext);
 
   return (
     <div>
       <h1 className={font.className}>You Should Watch</h1>
 
-      {list.length === 0 ? (
+      {isLoading && <p aria-busy="true">Hang on...</p>}
+      {list.length === 0 && !isLoading && (
         <p>
-          <i>You currently have no movies or shows on your list</i>
+          <i>You currently have no movies or TV shows on your list</i>
         </p>
-      ) : (
-        <ShowList results={list} config={config} genres={genres} />
       )}
 
-      {/* <b>DB:</b>
-      <pre>{JSON.stringify(list, undefined, 2)}</pre> */}
+      {list.length > 0 && (
+        <ShowList results={list} config={config} genres={genres} />
+      )}
     </div>
   );
 }
@@ -37,7 +37,7 @@ function ShowList({
   config,
   genres,
 }: {
-  results: SearchResult[];
+  results: StoredSearchResult[];
   config: Config;
   genres: Genre;
 }) {
@@ -48,7 +48,7 @@ function ShowList({
           key={result.id}
           index={i}
           config={config}
-          result={result}
+          result={result.result}
           genres={genres}
         />
       ))}
