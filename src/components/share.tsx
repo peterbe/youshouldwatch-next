@@ -8,6 +8,7 @@ import { DisplayMediaTypeIcon } from "./display-media-type-icon";
 import { Facts } from "./display-facts";
 import { FirebaseContext } from "../app/firebase-provider";
 import { detailsToSearchResult } from "./utils";
+import { GoBackHome } from "./go-back-home";
 
 export function Share({
   mediaType,
@@ -24,11 +25,9 @@ export function Share({
 }) {
   const { list, addToList, removeFromList } = useContext(FirebaseContext);
 
-  // console.log(details);
   const result = detailsToSearchResult(details, mediaType);
-  const onListAlready = new Set(list.map((r) => r.id)).has(result.id);
+  const onListAlready = new Set(list.map((r) => r.result.id)).has(result.id);
 
-  // const result: SearchResult = details;
   return (
     <div>
       <div className="grid">
@@ -44,11 +43,11 @@ export function Share({
 
       {(result.media_type == "movie" || result.media_type === "tv") && (
         <button
-          onClick={() => {
+          onClick={async () => {
             if (onListAlready) {
-              removeFromList(result);
+              await removeFromList(result);
             } else {
-              addToList(result);
+              await addToList(result);
             }
           }}
         >
@@ -57,6 +56,8 @@ export function Share({
       )}
 
       <Facts result={result} genres={genres} />
+
+      <GoBackHome />
     </div>
   );
 }

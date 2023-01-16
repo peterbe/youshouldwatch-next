@@ -1,7 +1,7 @@
 import "@picocss/pico/css/pico.min.css";
 
 import FirebaseProvider from "./firebase-provider";
-import { Nav } from "./nav";
+import { Nav } from "../components/nav";
 // import './globals.css'
 
 export default async function RootLayout({

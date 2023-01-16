@@ -14,6 +14,11 @@ export function Facts({
 
   return (
     <div className={styles.facts}>
+      {result.media_type && (
+        <p>
+          <b>Type</b> <i>{result.media_type}</i>
+        </p>
+      )}
       {result.overview && (
         <p>
           <b>Overview</b>

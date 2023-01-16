@@ -23,3 +23,24 @@ export function detailsToSearchResult(
   };
   return result;
 }
+
+export function rememberLastLogin(email: string) {
+  try {
+    localStorage.setItem("last_login", email);
+    return true;
+  } catch (err) {
+    console.error("Unable to local store the last_login", err);
+    return false;
+  }
+}
+
+export function getLastLogin() {
+  try {
+    const v = localStorage.getItem("last_login");
+    if (v) return v;
+    return "";
+  } catch (err) {
+    console.error("Unable to local store the last_login", err);
+    return "";
+  }
+}
