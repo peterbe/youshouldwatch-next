@@ -87,6 +87,24 @@ test("auth and sign out", async ({ page }) => {
   await expect(page.getByTestId("nav-auth")).toBeVisible();
 });
 
+test("add to temporary list, then sign in", async ({ page }) => {
+  await page.goto(BASE_URL + "/add");
+  const input = page.getByTestId("add-search");
+  await input.fill("departed");
+  await input.press("Enter");
+  await expect(page.getByText("The Departed").nth(0)).toBeVisible();
+  await page.getByTestId("display-toggle").nth(0).click();
+  await page.goto(BASE_URL + "/");
+  await expect(page.getByText("The Departed").nth(0)).toBeVisible();
+
+  await googleAuth(page);
+  await page.goto(BASE_URL + "/");
+  const title = page.getByText("The Departed");
+  await expect(title).toBeVisible();
+  const mentions = await title.count();
+  expect(mentions).toBe(1);
+});
+
 async function googleAuth(page: Page) {
   await page.goto(BASE_URL + "/");
   await page.getByTestId("nav-auth").nth(0).click();
