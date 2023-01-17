@@ -1,11 +1,12 @@
 "use client";
 import { createContext, useEffect, useState } from "react";
 import { initializeApp } from "firebase/app";
-import type { Firestore, Unsubscribe } from "firebase/firestore";
+import { Firestore, Timestamp, Unsubscribe } from "firebase/firestore";
 import {
   getFirestore,
   onSnapshot,
   connectFirestoreEmulator,
+  writeBatch,
 } from "firebase/firestore";
 import {
   collection,
@@ -25,6 +26,7 @@ import {
 
 import type { SearchResult, StoredSearchResult } from "../types";
 import { rememberLastLogin } from "../components/utils";
+import { useTemporaryList } from "./use-temporary-list";
 
 const EMULATE_FIREBASE = Boolean(
   JSON.parse(process.env.NEXT_PUBLIC_EMULATE_FIREBASE || "false")
@@ -71,7 +73,9 @@ export default function FirebaseProvider({
 }) {
   const [error, setError] = useState<Error | null>(null);
   const [list, setList] = useState<StoredSearchResult[]>([]);
-  const [temporaryList, setTemporaryList] = useState<StoredSearchResult[]>([]);
+  const { temporaryList, setTemporaryList, clearTemporaryList } =
+    useTemporaryList();
+
   const [undoDelete, setUndoDelete] = useState<SearchResult | null>(null);
   const [auth, setAuth] = useState<Auth | null>(null);
   const [db, setDb] = useState<Firestore | null>(null);
@@ -145,6 +149,29 @@ export default function FirebaseProvider({
       if (unsubscribe) unsubscribe();
     };
   }, [db, user]);
+
+  useEffect(() => {
+    if (user && db && temporaryList.length > 0) {
+      const batch = writeBatch(db);
+      const coll = collection(db, "list");
+      for (const each of temporaryList) {
+        const newRef = doc(coll);
+        batch.set(newRef, {
+          uid: user.uid,
+          added: new Date(each.added),
+          result: each.result,
+        });
+      }
+      batch
+        .commit()
+        .then(() => {
+          clearTemporaryList();
+        })
+        .catch((err) => {
+          setError(err);
+        });
+    }
+  }, [user, db, temporaryList]);
 
   const listIds = list.map((x) => x.result.id);
   const combinedList = [
