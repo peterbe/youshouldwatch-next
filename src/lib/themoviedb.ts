@@ -33,6 +33,8 @@ export const getConfig = cache(async () => {
   const r = await axios.get<Config>(url);
   console.timeEnd(url.replace(API_KEY, "***"));
   _configCache = r.data;
+  // console.log(r.data);
+
   return r.data;
 });
 

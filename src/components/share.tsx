@@ -55,7 +55,7 @@ export function Share({
         </button>
       )}
 
-      <Facts result={result} genres={genres} />
+      <Facts result={result} genres={genres} config={config} />
 
       <GoBackHome />
     </div>

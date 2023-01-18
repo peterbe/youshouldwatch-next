@@ -20,6 +20,7 @@ export type ConfigResponse = {
 export type SearchResult = {
   adult: boolean;
   backdrop_path: string | null;
+  profile_path: string | null;
   genre_ids: number[];
   id: number;
   media_type: string; // should it be 'movie' | 'tvshow' ...
@@ -30,11 +31,12 @@ export type SearchResult = {
   poster_path: string | null;
   release_date: string;
   title?: string; // movies
-  name?: string; // tv
+  name?: string; // tv or person
   video: boolean;
   vote_average: number | null;
   vote_count: number | null;
   first_air_date?: string;
+  known_for?: SearchResult[];
 };
 
 export type SearchResults = {
@@ -61,25 +63,11 @@ export type Genres = {
   }[];
 };
 
-// export type GenresResponse = {
-//   genres: {
-//     id: number;
-//     name: string;
-//   }[];
-// };
-
 export type Languages = {
   iso_639_1: string;
   english_name: string;
   name?: string;
 }[];
-
-// export type Genre = {
-//   id: number;
-//   name: string;
-// };
-
-// export type Genres = Genre[];
 
 type _Collection = {
   id: number;
@@ -110,6 +98,7 @@ export type MediaDetails = Genres & {
   name: string;
   backdrop_path: string | null;
   poster_path: string | null;
+  profile_path: string | null;
   adult: boolean;
   belongs_to_collection: null | _Collection;
   budget?: number;
