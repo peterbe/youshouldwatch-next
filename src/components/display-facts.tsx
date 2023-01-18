@@ -1,12 +1,17 @@
-import type { Genre, SearchResult } from "../types";
+import Link from "next/link";
+
+import type { Genre, SearchResult, Config } from "../types";
 import styles from "./display.module.css";
+import { PosterImage } from "./poster-image";
 
 export function Facts({
   result,
   genres,
+  config,
 }: {
   result: SearchResult;
   genres: Genre;
+  config: Config;
 }) {
   const resolvedGenres = (result.genre_ids || [])
     .map((id) => genres[id])
@@ -24,6 +29,9 @@ export function Facts({
           <b>Overview</b>
           <i>{result.overview}</i>
         </p>
+      )}
+      {result.known_for && result.known_for.length > 0 && (
+        <KnownFor results={result.known_for} config={config} />
       )}
       {resolvedGenres.length > 0 && (
         <p>
@@ -61,7 +69,42 @@ export function Facts({
     </div>
   );
 }
+function KnownFor({
+  results,
+  config,
+}: {
+  results: SearchResult[];
+  config: Config;
+}) {
+  return (
+    <div>
+      <p>
+        <b>Known for</b>
+      </p>
 
+      <div className="grid">
+        {results.map((result, i) => {
+          return (
+            <div key={result.id}>
+              <Link href={`/share/${result.media_type}/${result.id}`}>
+                <PosterImage
+                  index={i}
+                  result={result}
+                  config={config}
+                  smallAsPossible={true}
+                />
+              </Link>
+              <br />
+              <Link href={`/share/${result.media_type}/${result.id}`}>
+                {result.title || result.name}
+              </Link>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
 function YearsAgo({ date }: { date: string }) {
   const d = new Date(date);
   const ageSeconds = (new Date().getTime() - d.getTime()) / 1000;

@@ -8,6 +8,7 @@ export function detailsToSearchResult(
     adult: details.adult,
     backdrop_path: details.backdrop_path,
     poster_path: details.poster_path,
+    profile_path: details.profile_path,
     genre_ids: details.genres.map((g) => g.id),
     id: details.id,
     original_language: details.original_language,
