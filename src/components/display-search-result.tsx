@@ -62,7 +62,8 @@ export function DisplayResult({
   const isPerson = mediaType_ === "person";
 
   return (
-    <article>
+    // IDEA: Perhaps set the fade in animation with IntersectionObserver
+    <article style={{ animation: "fadeIn 0.5s" }}>
       <hgroup>
         <h2 className={font.className}>{result.title || result.name}</h2>
         <h3>{mediaType_}</h3>
