@@ -10,7 +10,8 @@
     "prettier:write": "prettier --write .",
     "prettier:check": "prettier --check .",
     "tsc": "tsc --noEmit",
-    "emulate": "firebase emulators:start"
+    "emulate": "firebase emulators:start",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@next/font": "13.1.2",
@@ -34,6 +35,7 @@
   "devDependencies": {
     "@playwright/test": "1.29.2",
     "firebase-tools": "11.20.0",
-    "prettier": "2.8.3"
+    "prettier": "2.8.3",
+    "husky": "^8.0.0"
   }
 }
