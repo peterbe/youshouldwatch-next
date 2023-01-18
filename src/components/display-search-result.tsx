@@ -1,13 +1,13 @@
 import Link from "next/link";
-import { createRef, useContext, useEffect, useState } from "react";
-import party from "party-js";
+import { useContext } from "react";
+
 import type { Config, Genre, SearchResults, SearchResult } from "../types";
 
 import { FirebaseContext } from "../app/firebase-provider";
 import { font } from "./font";
 import { PosterImage } from "./poster-image";
 import { Facts } from "./display-facts";
-import { DisplayMediaTypeIcon } from "./display-media-type-icon";
+import { triggerParty } from "./party";
 
 export function DisplaySearchResults({
   data,
@@ -67,9 +67,6 @@ export function DisplayResult({
         <h2 className={font.className}>{result.title || result.name}</h2>
         <h3>{mediaType_}</h3>
       </hgroup>
-      {/* <DisplayMediaTypeIcon mediaType={mediaType_} /> */}
-
-      {/* <h2 className={font.className}>{result.title || result.name}</h2> */}
 
       <PosterImage index={index} result={result} config={config} />
       {isMovieOrTV && (
@@ -110,11 +107,7 @@ function AboutMedia({
             removeFromList(result);
           } else {
             addToList(result).then(() => {
-              party.confetti(event.target as HTMLElement, {
-                count: 60,
-                spread: party.variation.range(40, 50),
-                speed: party.variation.range(500, 600),
-              });
+              triggerParty(event.target as HTMLElement);
             });
           }
         }}

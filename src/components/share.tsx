@@ -4,11 +4,11 @@ import type { Config, MediaType, MediaDetails, Genre } from "../types";
 
 import { font } from "./font";
 import { PosterImage } from "./poster-image";
-import { DisplayMediaTypeIcon } from "./display-media-type-icon";
 import { Facts } from "./display-facts";
 import { FirebaseContext } from "../app/firebase-provider";
 import { detailsToSearchResult } from "./utils";
 import { GoBackHome } from "./go-back-home";
+import { triggerParty } from "./party";
 
 export function Share({
   mediaType,
@@ -30,24 +30,22 @@ export function Share({
 
   return (
     <div>
-      <div className="grid">
-        <div>
-          <h1 className={font.className}>{details.title || details.name}</h1>
-        </div>
-        <div style={{ textAlign: "right" }}>
-          <DisplayMediaTypeIcon mediaType={mediaType} />
-        </div>
-      </div>
+      <hgroup>
+        <h1 className={font.className}>{details.title || details.name}</h1>
+        <h3>{mediaType}</h3>
+      </hgroup>
 
       <PosterImage index={0} config={config} result={details} />
 
       {(result.media_type == "movie" || result.media_type === "tv") && (
         <button
-          onClick={async () => {
+          onClick={(event) => {
             if (onListAlready) {
-              await removeFromList(result);
+              removeFromList(result);
             } else {
-              await addToList(result);
+              addToList(result).then(() => {
+                triggerParty(event.target as HTMLElement);
+              });
             }
           }}
         >

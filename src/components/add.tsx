@@ -175,7 +175,7 @@ function Form({
         </div>
       </form>
 
-      {isValidating && <article aria-busy="true">Loading</article>}
+      {isLoading && !data && <article aria-busy="true">Loading</article>}
 
       {data && !error && (
         <DisplaySearchResults
