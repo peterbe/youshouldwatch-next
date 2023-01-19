@@ -1,7 +1,7 @@
 "use client";
 import { createContext, useEffect, useState } from "react";
 import { initializeApp } from "firebase/app";
-import { Firestore, Timestamp, Unsubscribe } from "firebase/firestore";
+import { Firestore, Unsubscribe } from "firebase/firestore";
 import {
   getFirestore,
   onSnapshot,
@@ -55,6 +55,8 @@ type Interface = {
   addToList: (x: SearchResult) => Promise<void>;
   removeFromList: (x: SearchResult) => Promise<void>;
   isLoading: boolean;
+  firebaseError: Error | null;
+  resetFirebaseError: () => void;
 };
 export const FirebaseContext = createContext<Interface>({
   user: null,
@@ -64,6 +66,8 @@ export const FirebaseContext = createContext<Interface>({
   addToList: async () => {},
   removeFromList: async () => {},
   isLoading: true,
+  firebaseError: null,
+  resetFirebaseError: async () => {},
 });
 
 export default function FirebaseProvider({
@@ -97,25 +101,25 @@ export default function FirebaseProvider({
 
   const [user, setUser] = useState<User | false | null>(null);
   useEffect(() => {
-    // console.log("AUTO CREATED!", auth);
     if (auth) {
-      onAuthStateChanged(auth, (user) => {
-        if (user) {
-          setUser(user);
-
-          // if (temporaryList.length) {
-          //   console.log("NEED TO MOVE OVER...", temporaryList);
-          // }
-          // User is signed in, see docs for a list of available properties
-          // https://firebase.google.com/docs/reference/js/firebase.User
-          // const uid = user.uid;
-          // ...
-        } else {
-          // User is signed out
-          // ...
-          setUser(false);
+      onAuthStateChanged(
+        auth,
+        (user) => {
+          if (user) {
+            setUser(user);
+          } else {
+            // User is signed out (or has never signed in yet)
+            setUser(false);
+          }
+        },
+        (err) => {
+          if (err instanceof Error) {
+            setError(err);
+          } else {
+            throw err;
+          }
         }
-      });
+      );
     }
   }, [auth]);
   useEffect(() => {
@@ -130,20 +134,30 @@ export default function FirebaseProvider({
       // Create a listener
       const q = query(collection(db, "list"), where("uid", "==", user.uid));
 
-      unsubscribe = onSnapshot(q, (snapshot) => {
-        const results: StoredSearchResult[] = [];
-        snapshot.forEach((doc) => {
-          // doc.data() is never undefined for query doc snapshots
-          const data = doc.data();
-          results.push({
-            id: doc.id,
-            added: data.added.toDate(),
-            uid: data.uid,
-            result: data.result,
+      unsubscribe = onSnapshot(
+        q,
+        (snapshot) => {
+          const results: StoredSearchResult[] = [];
+          snapshot.forEach((doc) => {
+            // doc.data() is never undefined for query doc snapshots
+            const data = doc.data();
+            results.push({
+              id: doc.id,
+              added: data.added.toDate(),
+              uid: data.uid,
+              result: data.result,
+            });
           });
-        });
-        setList(results);
-      });
+          setList(results);
+        },
+        (err) => {
+          if (err instanceof Error) {
+            setError(err);
+          } else {
+            throw err;
+          }
+        }
+      );
     }
     return () => {
       if (unsubscribe) unsubscribe();
@@ -189,10 +203,16 @@ export default function FirebaseProvider({
     list: combinedList,
     addToList: async (result: SearchResult) => {
       if (user && db) {
-        const docRef = await addDoc(collection(db, "list"), {
+        addDoc(collection(db, "list"), {
           uid: user.uid,
           added: new Date(),
           result,
+        }).catch((err) => {
+          if (err instanceof Error) {
+            setError(err);
+          } else {
+            throw err;
+          }
         });
       } else {
         // setList((prevState) => [
@@ -234,6 +254,7 @@ export default function FirebaseProvider({
         deleteDoc(doc(db, "list", found.id))
           .then(() => {
             // deleted
+            setUndoDelete(result);
           })
           .catch((err) => {
             if (err instanceof Error) {
@@ -242,11 +263,15 @@ export default function FirebaseProvider({
               throw err;
             }
           });
+      } else {
+        setUndoDelete(result);
       }
-
-      setUndoDelete(result);
     },
     isLoading: !db || user === null,
+    firebaseError: error,
+    resetFirebaseError: () => {
+      setError(null);
+    },
   };
 
   return (
