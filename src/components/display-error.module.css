@@ -1,0 +1,10 @@
+.error {
+  border: 1px solid red;
+  z-index: 1000;
+  position: absolute;
+  bottom: 10px;
+  width: 70%;
+}
+.error h3 {
+  /* color: pink; */
+}
