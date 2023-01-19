@@ -9,8 +9,10 @@ import { FirebaseContext } from "../app/firebase-provider";
 import { font } from "./font";
 import { GoBackHome } from "./go-back-home";
 import { getLastLogin } from "./utils";
+import { DisplayError } from "./display-error";
 
 export function SignIn() {
+  const [error, setError] = useState<Error | null>(null);
   const router = useRouter();
   const { user, auth, signOut } = useContext(FirebaseContext);
 
@@ -52,7 +54,13 @@ export function SignIn() {
                     login_hint: lastLogin,
                   });
                 }
-                signInWithRedirect(auth, provider);
+                signInWithRedirect(auth, provider).catch((err) => {
+                  if (err instanceof Error) {
+                    setError(err);
+                  } else {
+                    throw err;
+                  }
+                });
               }
             }}
           >
@@ -69,6 +77,14 @@ export function SignIn() {
             if you ever reset your browser or switch to another browser.
           </p>
         </div>
+      )}
+
+      {error && (
+        <DisplayError
+          error={error}
+          title="Unable to sign in"
+          closeError={() => setError(null)}
+        />
       )}
 
       <GoBackHome />
