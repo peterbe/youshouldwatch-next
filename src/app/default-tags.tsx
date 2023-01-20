@@ -2,8 +2,12 @@ export default function DefaultTags() {
   return (
     <>
       <meta content="width=device-width, initial-scale=1" name="viewport" />
-      <meta name="description" content="You should totally watch..." />
+      <meta
+        name="description"
+        content="A to-watch list for movies and TV shows"
+      />
       <link rel="icon" href="/favicon.ico" />
+      <link rel="manifest" href="/manifest.json" />
       <link
         rel="apple-touch-icon"
         sizes="180x180"
