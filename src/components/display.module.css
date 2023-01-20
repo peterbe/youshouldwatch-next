@@ -17,3 +17,9 @@
 .media_icon {
   float: right;
 }
+
+.result {
+  animation: "fadeIn 0.5s";
+  margin-top: 0;
+  padding: 20px;
+}
