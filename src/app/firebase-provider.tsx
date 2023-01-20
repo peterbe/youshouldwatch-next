@@ -40,7 +40,8 @@ if (EMULATE_FIREBASE) {
 // Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyBwvbuDEJUGvOsIzRwT7rp27hG8A_dUqLc",
-  authDomain: "youshouldwatch-77a46.firebaseapp.com",
+  // authDomain: "youshouldwatch-77a46.firebaseapp.com",
+  authDomain: "ushdwat.ch",
   projectId: "youshouldwatch-77a46",
   storageBucket: "youshouldwatch-77a46.appspot.com",
   messagingSenderId: "747469617089",
