@@ -23,6 +23,16 @@ const nextConfig = {
           }
         ],
       },
+      {
+        source: '/manifest.json',
+        locale: false,
+        headers: [
+          {
+            key: 'cache-control',
+            value: 'public, max-age=86400',
+          }
+        ],
+      },
     ]
   },
 }
