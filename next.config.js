@@ -5,8 +5,8 @@ const nextConfig = {
   },
   async rewrites() {
     return [{
-        source: "/__auth/:path*",
-        destination: "https://youshouldwatch-77a46.firebaseapp.com/__auth/:path*",
+        source: "/__/auth/:path*",
+        destination: "https://youshouldwatch-77a46.firebaseapp.com/__/auth/:path*",
 
     }]
   }
