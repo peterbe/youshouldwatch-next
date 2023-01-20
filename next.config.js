@@ -9,7 +9,22 @@ const nextConfig = {
         destination: "https://youshouldwatch-77a46.firebaseapp.com/__/auth/:path*",
 
     }]
-  }
+  },
+
+  async headers() {
+    return [
+      {
+        source: '/:all*(svg|ico)',
+        locale: false,
+        headers: [
+          {
+            key: 'cache-control',
+            value: 'public, max-age=86400, must-revalidate',
+          }
+        ],
+      },
+    ]
+  },
 }
 
 module.exports = nextConfig
