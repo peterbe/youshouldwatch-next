@@ -8,6 +8,7 @@ import { font } from "./font";
 import { PosterImage } from "./poster-image";
 import { Facts } from "./display-facts";
 import { triggerParty } from "./party";
+import styles from "./display.module.css";
 
 export function DisplaySearchResults({
   data,
@@ -22,7 +23,6 @@ export function DisplaySearchResults({
 }) {
   return (
     <div>
-      <p>Found {data.total_results.toLocaleString()} results</p>
       {data.results.map((result, i) => (
         <DisplayResult
           key={result.id}
@@ -63,7 +63,7 @@ export function DisplayResult({
 
   return (
     // IDEA: Perhaps set the fade in animation with IntersectionObserver
-    <article style={{ animation: "fadeIn 0.5s" }}>
+    <article className={styles.result}>
       <hgroup>
         <h2 className={font.className}>{result.title || result.name}</h2>
         <h3>{mediaType_}</h3>

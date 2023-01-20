@@ -10,6 +10,7 @@ import type { Config, Genre, Languages, SearchResults } from "../types";
 
 import { font } from "./font";
 import { DisplaySearchResults } from "./display-search-result";
+import styles from "./add.module.css";
 
 const fetcher = (url: string) => fetch(url).then((r) => r.json());
 
@@ -118,6 +119,52 @@ function Form({
         <div className="grid">
           <div>
             <fieldset>
+              <label htmlFor="type_multi" className={styles.type_label}>
+                <input
+                  type="radio"
+                  id="type_multi"
+                  name="type"
+                  value="multi"
+                  checked={searchType === ""}
+                  onChange={() => setSearchType("")}
+                />
+                Both
+              </label>
+              <label htmlFor="type_movie" className={styles.type_label}>
+                <input
+                  type="radio"
+                  id="type_movie"
+                  name="type"
+                  value="movie"
+                  checked={searchType === "movie"}
+                  onChange={() => setSearchType("movie")}
+                />
+                Movie
+              </label>
+              <label htmlFor="type_tv" className={styles.type_label}>
+                <input
+                  type="radio"
+                  id="type_tv"
+                  name="type"
+                  value="tv"
+                  checked={searchType === "tv"}
+                  onChange={() => setSearchType("tv")}
+                />
+                TV show
+              </label>
+            </fieldset>
+          </div>
+          <div>
+            {data && (
+              <p className={styles.found_total_results}>
+                Found {data.total_results.toLocaleString()} results
+              </p>
+            )}
+          </div>
+        </div>
+        {/* <div className="grid">
+          <div>
+            <fieldset>
               <label htmlFor="type_multi">
                 <input
                   type="radio"
@@ -172,7 +219,7 @@ function Form({
                 ))}
             </select>
           </div>
-        </div>
+        </div> */}
       </form>
 
       {isLoading && !data && <article aria-busy="true">Loading</article>}
