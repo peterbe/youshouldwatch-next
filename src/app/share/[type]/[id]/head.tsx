@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import DefaultTags from "../../../default-tags";
 import type { MediaType } from "../../../../types";
 import { getConfig, getDetails } from "../../../../lib/themoviedb";
+import { BASE_URL } from "../../../../lib/constants";
 
 export default async function Head({
   params,
@@ -49,11 +50,15 @@ export default async function Head({
   }
 
   const title = `You Should Watch: ${details.title || details.name}`;
+
+  // Because usePathname doesn't work in server components, we have to
+  // manually create this.
+  const ogURL = `${BASE_URL}/share/${mediaType}/${id}`;
+
   return (
     <>
-      {/* Does't work :( */}
-      {/* {pathname && <meta property="og:url" content={pathname} />} */}
-
+      <meta property="og:url" content={ogURL} />
+      <meta property="og:type" content={mediaType} />
       <meta property="og:title" content={title} />
       {imageUrl && <meta property="og:image" content={imageUrl} />}
       <title>{title}</title>
