@@ -99,6 +99,30 @@ export const getDetails = cache(async (mediaType: MediaType, id: number) => {
   return r.data;
 });
 
+export const getAllDetails = cache(async (mediaType: MediaType, id: number) => {
+  if (!API_KEY) {
+    throw new Error("Not configured");
+  }
+  const sp = new URLSearchParams({ api_key: API_KEY });
+
+  const extra = [
+    // "external_ids",
+    "images",
+    // "keywords",
+    "recommendations",
+    // "reviews",
+    // "similar",
+    "videos",
+    "credits",
+  ];
+  sp.set("append_to_response", extra.join(","));
+  const url = `https://api.themoviedb.org/3/${mediaType}/${id}?${sp}`;
+  console.time(url.replace(API_KEY, "***"));
+  const r = await axios.get<MediaDetails>(url);
+  console.timeEnd(url.replace(API_KEY, "***"));
+  return r.data;
+});
+
 export const search = cache(
   async (
     query: string,

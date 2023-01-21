@@ -21,6 +21,12 @@
   }
 }
 
+/* Because it uses 'article' it gets too much margin from the global CSS */
+article.yt-lite {
+  margin: 0;
+  margin-bottom: 10px;
+}
+
 /* :root {
   --max-width: 1100px;
   --border-radius: 12px;

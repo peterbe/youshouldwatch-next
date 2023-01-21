@@ -73,8 +73,7 @@ function Form({
     }
   }, [searchType, pathname, router, searchParams]);
 
-  // const searched = useSearch(debouncedSearch.trim());
-  const { data, error, isLoading, isValidating } = useSWR<SearchResults, Error>(
+  const { data, error, isLoading } = useSWR<SearchResults, Error>(
     debouncedSearch.trim()
       ? `/api/themoviedb/search?${new URLSearchParams({
           query: debouncedSearch.trim(),

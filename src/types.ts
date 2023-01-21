@@ -128,3 +128,46 @@ export type MediaDetails = Genres & {
 export type MovieData = MediaDetails & {};
 
 export type TVData = MediaDetails & {};
+
+type Credit = {
+  adult: boolean;
+  character: string;
+  credit_id: string;
+  gender: number | null;
+  id: number;
+  known_for_department: string;
+  name: string;
+  order: number;
+  original_name: string;
+  popularity: number;
+  profile_path: string | null;
+};
+
+type Video = {
+  id: string;
+  iso_639_1: string;
+  iso_3166_1: string;
+  key: string;
+  name: string;
+  official: boolean;
+  published_at: string;
+  site: string;
+  size: number;
+  type: string;
+};
+
+export type AllDetails = MediaDetails & {
+  credits: {
+    cast?: Credit[];
+    crew?: Credit[];
+  };
+  videos: {
+    results: Video[];
+  };
+  recommendations: {
+    page: number;
+    total_pages: number;
+    total_results: number;
+    results: SearchResult[];
+  };
+};

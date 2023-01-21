@@ -9,6 +9,7 @@ import { PosterImage } from "./poster-image";
 import { Facts } from "./display-facts";
 import { triggerParty } from "./party";
 import styles from "./display.module.css";
+import { AllInformation } from "./all-information";
 
 export function DisplaySearchResults({
   data,
@@ -31,6 +32,7 @@ export function DisplaySearchResults({
           config={config}
           genres={genres}
           mediaType={mediaType}
+          loadOnIntersection={false}
         />
       ))}
     </div>
@@ -43,12 +45,14 @@ export function DisplayResult({
   config,
   genres,
   mediaType,
+  loadOnIntersection,
 }: {
   result: SearchResult;
   index: number;
   config: Config;
   genres: Genre;
   mediaType?: "movie" | "tv" | "";
+  loadOnIntersection: boolean;
 }) {
   // When you make a Multi search, each result will have a `media_type`
   // which will be 'movie', 'tv', or 'person'.
@@ -76,6 +80,7 @@ export function DisplayResult({
           mediaType={mediaType_}
           genres={genres}
           config={config}
+          loadOnIntersection={loadOnIntersection}
         />
       )}
       {isPerson && (
@@ -90,11 +95,13 @@ function AboutMedia({
   mediaType,
   genres,
   config,
+  loadOnIntersection,
 }: {
   result: SearchResult;
   mediaType: "movie" | "tv";
   genres: Genre;
   config: Config;
+  loadOnIntersection: boolean;
 }) {
   const { list, addToList, removeFromList } = useContext(FirebaseContext);
   const onListAlready = new Set(list.map((r) => r.result.id)).has(result.id);
@@ -126,6 +133,14 @@ function AboutMedia({
       </Link>
 
       <Facts result={result} genres={genres} config={config} />
+
+      <AllInformation
+        result={result}
+        genres={genres}
+        config={config}
+        mediaType={mediaType}
+        loadOnIntersection={loadOnIntersection}
+      />
     </div>
   );
 }

@@ -65,7 +65,7 @@ export function PosterImage({
     const desktop = start + largest + end;
 
     return (
-      <picture>
+      <picture className={styles.poster_image}>
         <source srcSet={desktop} media="(min-width: 1200px)" />
         <source srcSet={tablet} media="(min-width: 600px)" />
         <img
@@ -88,5 +88,61 @@ export function PosterImage({
       />
       <i>{"Has no poster :("}</i>
     </span>
+  );
+}
+
+export function SimplePosterImage({
+  config,
+  alt,
+  backdrop_path,
+  poster_path,
+  profile_path,
+  lazyLoad,
+}: {
+  config: Config;
+  alt?: string;
+  backdrop_path?: string;
+  poster_path?: string;
+  profile_path?: string;
+  lazyLoad?: boolean;
+}) {
+  if (!backdrop_path && !poster_path && !profile_path) {
+    return null;
+  }
+  let largeAsPossible: string | undefined;
+  let smallAsPossible = "";
+  if (backdrop_path) {
+    largeAsPossible = config.images.backdrop_sizes
+      .filter((x) => x !== "original")
+      .at(-1);
+    smallAsPossible = config.images.backdrop_sizes[0];
+  } else if (poster_path) {
+    largeAsPossible = config.images.poster_sizes
+      .filter((x) => x !== "original")
+      .at(-1);
+    smallAsPossible = config.images.poster_sizes[0];
+  } else if (profile_path) {
+    largeAsPossible = config.images.profile_sizes
+      .filter((x) => x !== "original")
+      .at(-1);
+    smallAsPossible = config.images.profile_sizes[0];
+  }
+
+  const start = config.images.secure_base_url || "https://image.tmdb.org/t/p/";
+  const end = backdrop_path || poster_path || profile_path;
+  const large = largeAsPossible ? start + largeAsPossible + end : null;
+  const small = start + smallAsPossible + end;
+
+  return (
+    <picture className={styles.simple_poster_image}>
+      {large && <source srcSet={large} media="(min-width: 1200px)" />}
+      <source srcSet={small} media="(min-width: 600px)" />
+      <img
+        loading={lazyLoad ? "lazy" : undefined}
+        decoding={lazyLoad ? "async" : undefined}
+        src={small}
+        alt={alt}
+      />
+    </picture>
   );
 }

@@ -1,3 +1,14 @@
+.poster_image img {
+  border-radius: 3px;
+  margin-bottom: 10px;
+}
+
 .small_as_possible {
   max-width: 200px;
+}
+
+.simple_poster_image img {
+  border-radius: 3px;
+  margin-right: 10px;
+  margin-bottom: 10px;
 }

@@ -19,6 +19,7 @@ specifiers:
   prettier: 2.8.3
   react: 18.2.0
   react-dom: 18.2.0
+  react-lite-youtube-embed: 2.3.52
   sharp: 0.31.3
   swr: 2.0.1
   typescript: 4.9.4
@@ -38,6 +39,7 @@ dependencies:
   party-js: 2.2.0
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
+  react-lite-youtube-embed: 2.3.52_biqbaboplfbrettd7655fr4n2y
   sharp: 0.31.3
   swr: 2.0.1_react@18.2.0
   typescript: 4.9.4
@@ -5355,6 +5357,16 @@ packages:
 
   /react-is/16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
+    dev: false
+
+  /react-lite-youtube-embed/2.3.52_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-G010PvCavA4EqL8mZ/Sv9XXiHnjMfONW+lmNeCRnSEPluPdptv2lZ0cNlngrj7K9j7luc8pbpyrmNpKbD9VMmw==}
+    peerDependencies:
+      react: '>=16.0.8'
+      react-dom: '>=16.0.8'
+    dependencies:
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
     dev: false
 
   /react/18.2.0:
