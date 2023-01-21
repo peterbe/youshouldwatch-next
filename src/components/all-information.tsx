@@ -92,7 +92,7 @@ function DisplayAllData({
 }) {
   const [cappedCast, setCappedCast] = useState(4);
   const [cappedVideos, setCappedVideos] = useState(2);
-  const [cappedRecommendations, setCappedRecommendations] = useState(5);
+  const [cappedRecommendations, setCappedRecommendations] = useState(4);
 
   const youTubeVideos =
     data.videos && data.videos.results
@@ -104,7 +104,13 @@ function DisplayAllData({
       {data.credits && data.credits.cast && data.credits.cast.length > 0 && (
         <div className={styles.list_data}>
           <h3>Cast</h3>
-          <div className="grid">
+          <div
+            className={
+              Math.min(data.credits.cast.length, cappedCast) <= 4
+                ? "grid"
+                : undefined
+            }
+          >
             {data.credits.cast.slice(0, cappedCast).map((cast) => {
               return (
                 <div key={cast.id}>
@@ -136,7 +142,13 @@ function DisplayAllData({
       {youTubeVideos.length > 0 && (
         <div className={styles.list_data}>
           <h3>Videos</h3>
-          <div className="grid">
+          <div
+            className={
+              Math.min(youTubeVideos.length, cappedVideos) <= 2
+                ? "grid"
+                : undefined
+            }
+          >
             {youTubeVideos.slice(0, cappedVideos).map((video) => {
               return (
                 <div key={video.id}>
@@ -169,7 +181,16 @@ function DisplayAllData({
         data.recommendations.results.length > 0 && (
           <div className={styles.list_data}>
             <h3>Recommendations</h3>
-            <div className="grid">
+            <div
+              className={
+                Math.min(
+                  data.recommendations.results.length,
+                  cappedRecommendations
+                ) <= 4
+                  ? "grid"
+                  : undefined
+              }
+            >
               {data.recommendations.results
                 .slice(0, cappedRecommendations)
                 .map((rec) => {
