@@ -27,11 +27,21 @@ export function SignIn() {
   return (
     <div>
       <h2 className={font.className}>Sign up/in</h2>
+
       {user && (
-        <Link href="/">
-          Already signed in as <b>{user.email}</b>
-        </Link>
+        <p>
+          <Link href="/" role="button">
+            Go to your watch list
+          </Link>
+        </p>
       )}
+
+      {user && (
+        <h4 className={font.className}>
+          Signed in as <b>{user.email}</b>
+        </h4>
+      )}
+
       {user && (
         <button
           onClick={async () => {

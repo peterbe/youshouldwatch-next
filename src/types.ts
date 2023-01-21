@@ -24,15 +24,15 @@ export type SearchResult = {
   genre_ids: number[];
   id: number;
   media_type: string; // should it be 'movie' | 'tvshow' ...
-  original_language: string;
-  original_title: string;
+  original_language: string | null;
+  original_title: string | null;
   overview: string | null;
   popularity: number;
   poster_path: string | null;
-  release_date: string;
+  release_date: string | null;
   title?: string; // movies
   name?: string; // tv or person
-  video: boolean;
+  video?: boolean;
   vote_average: number | null;
   vote_count: number | null;
   first_air_date?: string;

@@ -9,7 +9,7 @@ export function useTemporaryList() {
   function clearTemporaryList() {
     setTemporaryList([]);
     try {
-      sessionStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem(STORAGE_KEY);
     } catch (err) {
       console.warn("Unable to remove storage", err);
     }
@@ -17,7 +17,7 @@ export function useTemporaryList() {
 
   useEffect(() => {
     try {
-      const prev = sessionStorage.getItem(STORAGE_KEY);
+      const prev = localStorage.getItem(STORAGE_KEY);
       if (prev) {
         setTemporaryList(JSON.parse(prev));
       }
@@ -28,8 +28,10 @@ export function useTemporaryList() {
 
   useEffect(() => {
     try {
-      if (temporaryList.length > 0) {
-        sessionStorage.setItem(STORAGE_KEY, JSON.stringify(temporaryList));
+      if (temporaryList.length === 0) {
+        localStorage.removeItem(STORAGE_KEY);
+      } else {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(temporaryList));
       }
     } catch (err) {
       console.log("Unable to store temporary list in localStorage", err);

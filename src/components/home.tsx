@@ -12,7 +12,7 @@ type Props = {
 };
 
 export function Home({ config, genres, languages }: Props) {
-  const { list, isLoading } = useContext(FirebaseContext);
+  const { user, list, isLoading } = useContext(FirebaseContext);
 
   return (
     <div>
@@ -28,6 +28,8 @@ export function Home({ config, genres, languages }: Props) {
       {list.length > 0 && (
         <ShowList results={list} config={config} genres={genres} />
       )}
+
+      {!user && !list.length && <HowItWorks />}
     </div>
   );
 }
@@ -54,5 +56,32 @@ function ShowList({
         />
       ))}
     </div>
+  );
+}
+
+function HowItWorks() {
+  return (
+    <article>
+      <h2 className={font.className}>How It Works</h2>
+
+      <ol>
+        <li>
+          <h4 className={font.className}>
+            You search for movies and TV shows you should watch
+          </h4>
+        </li>
+        <li>
+          <h4 className={font.className}>
+            Add them to your list (Sign in with Google to not lose them)
+          </h4>
+        </li>
+        <li>
+          <h4 className={font.className}>You watch them</h4>
+        </li>
+        <li>
+          <h4 className={font.className}>Come back here, check it off</h4>
+        </li>
+      </ol>
+    </article>
   );
 }

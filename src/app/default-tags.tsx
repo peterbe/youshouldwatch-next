@@ -25,6 +25,9 @@ export default function DefaultTags() {
         sizes="16x16"
         href="/favicon-16x16.png"
       />
+      <meta name="mobile-web-app-capable" content="yes" />
+      <meta name="apple-mobile-web-app-capable" content="yes" />
+      <meta name="apple-mobile-web-app-title" content="You Should Watch" />
     </>
   );
 }
