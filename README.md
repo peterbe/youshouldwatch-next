@@ -66,3 +66,11 @@ To run just a single test, try:
 ```sh
 pnpm dlx playwright test tests/basics.spec.ts:16 --project=chromium
 ```
+
+## Upgrade pnpm packages
+
+Just run:
+
+```sh
+pnpm up -i --latest
+```
