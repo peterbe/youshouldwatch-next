@@ -50,6 +50,7 @@ function ShowList({
           config={config}
           result={result.result}
           genres={genres}
+          loadOnIntersection={true}
         />
       ))}
     </div>

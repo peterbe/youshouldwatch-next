@@ -9,6 +9,7 @@ import { FirebaseContext } from "../app/firebase-provider";
 import { detailsToSearchResult } from "./utils";
 import { GoBackHome } from "./go-back-home";
 import { triggerParty } from "./party";
+import { AllInformation } from "./all-information";
 
 export function Share({
   mediaType,
@@ -55,6 +56,13 @@ export function Share({
 
       <Facts result={result} genres={genres} config={config} />
 
+      <AllInformation
+        result={result}
+        genres={genres}
+        config={config}
+        mediaType={mediaType}
+        loadOnIntersection={true}
+      />
       <GoBackHome />
     </div>
   );
