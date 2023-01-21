@@ -216,7 +216,7 @@ function DisplayAllData({
 
       {data.homepage && (
         <p>
-          <a href={data.homepage} target="_blank">
+          <a href={data.homepage} target="_blank" rel="noreferrer">
             Homepage (<small>{new URL(data.homepage).hostname}</small>)
           </a>
         </p>
@@ -226,6 +226,7 @@ function DisplayAllData({
           <a
             href={`https://www.imdb.com/title/${data.imdb_id}/`}
             target="_blank"
+            rel="noreferrer"
           >
             <Image src="/imdb-logo.png" width={50} height={50} alt="Logo" />
           </a>
