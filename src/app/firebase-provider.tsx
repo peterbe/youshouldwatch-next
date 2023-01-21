@@ -204,17 +204,25 @@ export default function FirebaseProvider({
     list: combinedList,
     addToList: async (result: SearchResult) => {
       if (user && db) {
-        addDoc(collection(db, "list"), {
-          uid: user.uid,
-          added: new Date(),
-          result,
-        }).catch((err) => {
+        try {
+          addDoc(collection(db, "list"), {
+            uid: user.uid,
+            added: new Date(),
+            result,
+          }).catch((err) => {
+            if (err instanceof Error) {
+              setError(err);
+            } else {
+              throw err;
+            }
+          });
+        } catch (err) {
           if (err instanceof Error) {
             setError(err);
           } else {
             throw err;
           }
-        });
+        }
       } else {
         // setList((prevState) => [
         //   result,
