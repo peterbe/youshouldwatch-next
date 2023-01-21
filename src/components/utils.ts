@@ -11,19 +11,21 @@ export function detailsToSearchResult(
     profile_path: details.profile_path || null,
     genre_ids: details.genres.map((g) => g.id),
     id: details.id,
-    original_language: details.original_language,
-    original_title: details.original_title,
+    original_language: details.original_language || null,
+    original_title: details.original_title || null,
     overview: details.overview,
     popularity: details.popularity,
-    release_date: details.release_date,
-    title: details.title,
+    release_date: details.release_date || null,
+    // title: details.title,
     // name: details.name,
-    video: details.video,
+    // video: details.video,
     vote_average: details.vote_average || null,
     vote_count: details.vote_count || null,
   };
   // Avoid values that are undefined
   if (details.name) result.name = details.name;
+  if (details.title) result.title = details.title;
+  if (details.video) result.video = details.video;
 
   Object.entries(result).forEach(([key, value]) => {
     if (value === undefined) {

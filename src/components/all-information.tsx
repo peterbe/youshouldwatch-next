@@ -1,4 +1,6 @@
 import { useRef, useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
 import useSWR from "swr";
 import LiteYouTubeEmbed from "react-lite-youtube-embed";
 
@@ -7,8 +9,7 @@ import { DisplayError } from "./display-error";
 import { SimplePosterImage } from "./poster-image";
 import useIntersectionObserver from "./use-intersection-observer-hook";
 import styles from "./all-information.module.css";
-import Image from "next/image";
-import Link from "next/link";
+import { font } from "./font";
 
 const fetcher = (url: string) => fetch(url).then((r) => r.json());
 
@@ -103,7 +104,7 @@ function DisplayAllData({
     <div>
       {data.credits && data.credits.cast && data.credits.cast.length > 0 && (
         <div className={styles.list_data}>
-          <h3>Cast</h3>
+          <h3 className={font.className}>Cast</h3>
           <div
             className={
               Math.min(data.credits.cast.length, cappedCast) <= 4
@@ -141,7 +142,7 @@ function DisplayAllData({
 
       {youTubeVideos.length > 0 && (
         <div className={styles.list_data}>
-          <h3>Videos</h3>
+          <h3 className={font.className}>Videos</h3>
           <div
             className={
               Math.min(youTubeVideos.length, cappedVideos) <= 2
@@ -180,7 +181,7 @@ function DisplayAllData({
         data.recommendations &&
         data.recommendations.results.length > 0 && (
           <div className={styles.list_data}>
-            <h3>Recommendations</h3>
+            <h3 className={font.className}>Recommendations</h3>
             <div
               className={
                 Math.min(
