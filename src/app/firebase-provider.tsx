@@ -15,6 +15,7 @@ import {
   where,
   doc,
   deleteDoc,
+  orderBy,
 } from "firebase/firestore";
 import type { Auth, User } from "firebase/auth";
 import {
@@ -133,7 +134,11 @@ export default function FirebaseProvider({
     let unsubscribe: Unsubscribe | null = null;
     if (db && user) {
       // Create a listener
-      const q = query(collection(db, "list"), where("uid", "==", user.uid));
+      const q = query(
+        collection(db, "list"),
+        where("uid", "==", user.uid),
+        orderBy("added", "desc")
+      );
 
       unsubscribe = onSnapshot(
         q,
