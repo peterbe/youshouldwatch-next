@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { search } from "../../../lib/themoviedb";
+import { search, getAllDetails } from "../../../lib/themoviedb";
+import { MediaType } from "../../../types";
 
 export default async function handler(
   req: NextApiRequest,
@@ -43,6 +44,20 @@ export default async function handler(
     }
 
     const r = await search(query, opts);
+
+    res.setHeader("cache-control", "public,max-age=3600");
+    res.status(200).json(r);
+  } else if (lookup === "alldetails") {
+    let { id, mediaType } = req.query;
+    if (typeof mediaType !== "string" || !["movie", "tv"].includes(mediaType)) {
+      return res.status(400).json({ error: `mediaType (${mediaType})` });
+    }
+
+    if (typeof id !== "string" || isNaN(parseInt(id))) {
+      return res.status(400).json({ error: `id (${id})` });
+    }
+    const idInt = parseInt(id);
+    const r = await getAllDetails(mediaType as MediaType, idInt);
 
     res.setHeader("cache-control", "public,max-age=3600");
     res.status(200).json(r);
