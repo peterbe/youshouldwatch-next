@@ -27,6 +27,7 @@ export function Share({
   const { list, addToList, removeFromList } = useContext(FirebaseContext);
 
   const result = detailsToSearchResult(details, mediaType);
+
   const onListAlready = new Set(list.map((r) => r.result.id)).has(result.id);
 
   return (
