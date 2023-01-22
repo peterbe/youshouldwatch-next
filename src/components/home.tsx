@@ -4,14 +4,14 @@ import { font } from "./font";
 import { FirebaseContext } from "../app/firebase-provider";
 import { DisplayResult } from "./display-search-result";
 import type { StoredSearchResult, Config, Genre, Languages } from "../types";
+import Link from "next/link";
 
 type Props = {
   config: Config;
   genres: Genre;
-  languages: Languages;
 };
 
-export function Home({ config, genres, languages }: Props) {
+export function Home({ config, genres }: Props) {
   const { user, list, isLoading } = useContext(FirebaseContext);
 
   return (
@@ -19,11 +19,10 @@ export function Home({ config, genres, languages }: Props) {
       <h1 className={font.className}>You Should Watch</h1>
 
       {isLoading && <p aria-busy="true">Hang on...</p>}
-      {list.length === 0 && !isLoading && (
-        <p>
-          <i>You currently have no movies or TV shows on your list</i>
-        </p>
-      )}
+
+      {!isLoading && !user && list && list.length > 1 && <AnonymousWarning />}
+
+      {list.length === 0 && !isLoading && <Empty />}
 
       {list.length > 0 && (
         <ShowList results={list} config={config} genres={genres} />
@@ -59,6 +58,30 @@ function ShowList({
   );
 }
 
+function Empty() {
+  return (
+    <article>
+      <i>You currently have no movies or TV shows on your list</i>
+    </article>
+  );
+}
+
+function AnonymousWarning() {
+  return (
+    <article>
+      <p>
+        <b>Watch out!</b>
+      </p>
+      <p>
+        You have a list but it&apos;s only saved here on this device.{" "}
+        <Link href="/signin" role="button">
+          Sign up/in (free) to not lose it
+        </Link>
+      </p>
+    </article>
+  );
+}
+
 function HowItWorks() {
   return (
     <article>
@@ -72,7 +95,8 @@ function HowItWorks() {
         </li>
         <li>
           <h4 className={font.className}>
-            Add them to your list (Sign in with Google to not lose them)
+            Add them to your list (<Link href="/signin">Sign in</Link> with
+            Google to not lose them)
           </h4>
         </li>
         <li>
