@@ -73,7 +73,7 @@ function AnonymousWarning() {
         <b>Watch out!</b>
       </p>
       <p>
-        You have a list but it's only saved here on this device.{" "}
+        You have a list but it&apos;s only saved here on this device.{" "}
         <Link href="/signin" role="button">
           Sign up/in (free) to not lose it
         </Link>
