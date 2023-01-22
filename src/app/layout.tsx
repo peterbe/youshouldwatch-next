@@ -5,6 +5,7 @@ import { Nav } from "../components/nav";
 import "./globals.css";
 
 import { PossibleFirebaseError } from "../components/firebase-error";
+import { Footer } from "../components/footer";
 
 export default async function RootLayout({
   children,
@@ -23,6 +24,8 @@ export default async function RootLayout({
             {children}
 
             <PossibleFirebaseError />
+
+            <Footer />
           </main>
         </FirebaseProvider>
       </body>
