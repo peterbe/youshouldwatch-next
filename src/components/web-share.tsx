@@ -1,9 +1,5 @@
-// import { useContext } from "react";
-
 import copy from "copy-to-clipboard";
 
-// import { FirebaseContext } from "../app/firebase-provider";
-import { text } from "node:stream/consumers";
 import { useEffect, useState } from "react";
 import type { SearchResult } from "../types";
 import { triggerParty } from "./party";
@@ -23,8 +19,6 @@ export function WebShare({ result }: { result: SearchResult }) {
   const [shared, setShared] = useState(false);
   const [copied, setCopied] = useState(false);
   const [copiedOnce, setCopiedOnce] = useState(false);
-  //   const { list, addToList, removeFromList } = useContext(FirebaseContext);
-  //   const onListAlready = new Set(list.map((r) => r.result.id)).has(result.id);
 
   useEffect(() => {
     let mounted = true;
@@ -58,9 +52,13 @@ export function WebShare({ result }: { result: SearchResult }) {
     }
   }, [copied]);
 
+  function getURL() {
+    return `${window.location.origin}/share/${result.media_type}/${result.id}`;
+  }
+
   function getTextareaText() {
     let textareaText = `You should watch: ${result.title || result.name}`;
-    textareaText += `\n${window.location.href}`;
+    textareaText += `\n${getURL()}`;
     return textareaText;
   }
 
@@ -93,16 +91,15 @@ export function WebShare({ result }: { result: SearchResult }) {
             </header>
 
             <p>
-              <a href={window.location.href}>{window.location.href}</a>
+              <a href={getURL()}>{getURL()}</a>
             </p>
             <textarea rows={2} value={getTextareaText()} readOnly></textarea>
             <p>
               <button
                 onClick={() => {
-                  const x = copy(getTextareaText());
-                  console.log("X:", x);
-
-                  setCopied(true);
+                  if (copy(getTextareaText())) {
+                    setCopied(true);
+                  }
                 }}
               >
                 {copied ? "Copied!" : "Copy link to clipboard"}
@@ -136,7 +133,7 @@ export function WebShare({ result }: { result: SearchResult }) {
             const shareData = {
               title: result.title || result.name,
               text: `You should watch: ${result.title || result.name}`,
-              url: window.location.href,
+              url: getURL(),
             };
             navigator
               .share(shareData)
