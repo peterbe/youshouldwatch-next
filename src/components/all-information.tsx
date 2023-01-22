@@ -100,6 +100,10 @@ function DisplayAllData({
       ? data.videos.results.filter((v) => v.site === "YouTube" && v.key)
       : [];
 
+  const recommendations = data.recommendations
+    ? data.recommendations.results
+    : [];
+
   return (
     <div>
       {data.credits && data.credits.cast && data.credits.cast.length > 0 && (
@@ -177,64 +181,57 @@ function DisplayAllData({
         </div>
       )}
 
-      {data.recommendations &&
-        data.recommendations &&
-        data.recommendations.results.length > 0 && (
-          <div className={styles.list_data}>
-            <h3 className={font.className}>Recommendations</h3>
-            <div
-              className={
-                Math.min(
-                  data.recommendations.results.length,
-                  cappedRecommendations
-                ) <= 4
-                  ? "grid"
-                  : undefined
-              }
-            >
-              {data.recommendations.results
-                .slice(0, cappedRecommendations)
-                .map((rec) => {
-                  const url = `/share/${rec.media_type}/${rec.id}`;
-                  return (
-                    <div key={rec.id}>
-                      <Link href={url}>
-                        {rec.poster_path ? (
-                          <SimplePosterImage
-                            poster_path={rec.poster_path}
-                            alt={rec.title || rec.name}
-                            config={config}
-                          />
-                        ) : rec.backdrop_path ? (
-                          <SimplePosterImage
-                            backdrop_path={rec.backdrop_path}
-                            alt={rec.title || rec.name}
-                            config={config}
-                          />
-                        ) : (
-                          rec.title || rec.name
-                        )}
-                      </Link>
+      {recommendations.length > 0 && (
+        <div className={styles.list_data}>
+          <h3 className={font.className}>Recommendations</h3>
+          <div
+            className={
+              Math.min(recommendations.length, cappedRecommendations) <= 4
+                ? "grid"
+                : undefined
+            }
+          >
+            {recommendations.slice(0, cappedRecommendations).map((result) => {
+              const url = `/share/${result.media_type}/${result.id}`;
+              return (
+                <div key={result.id}>
+                  <Link href={url}>
+                    {result.poster_path ? (
+                      <SimplePosterImage
+                        poster_path={result.poster_path}
+                        alt={result.title || result.name}
+                        config={config}
+                      />
+                    ) : result.backdrop_path ? (
+                      <SimplePosterImage
+                        backdrop_path={result.backdrop_path}
+                        alt={result.title || result.name}
+                        config={config}
+                      />
+                    ) : (
+                      result.title || result.name
+                    )}
+                  </Link>
 
-                      <Link href={url}>
-                        <b>{rec.title || rec.name}</b>
-                      </Link>
-                    </div>
-                  );
-                })}
-              {data.recommendations.results.length > cappedCast && (
-                <button
-                  className="secondary"
-                  onClick={() => {
-                    setCappedRecommendations((p) => p + 5);
-                  }}
-                >
-                  Load more recommendations
-                </button>
-              )}
-            </div>
+                  <Link href={url}>
+                    <b>{result.title || result.name}</b>
+                  </Link>
+                </div>
+              );
+            })}
+            {recommendations.length > cappedCast && (
+              <button
+                className="secondary"
+                onClick={() => {
+                  setCappedRecommendations((p) => p + 5);
+                }}
+              >
+                Load more recommendations
+              </button>
+            )}
           </div>
-        )}
+        </div>
+      )}
 
       {data.homepage && (
         <p>

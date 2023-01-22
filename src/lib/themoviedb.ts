@@ -107,7 +107,7 @@ export const getAllDetails = cache(async (mediaType: MediaType, id: number) => {
 
   const extra = [
     // "external_ids",
-    "images",
+    // "images",
     // "keywords",
     "recommendations",
     // "reviews",
