@@ -1,15 +1,14 @@
 import Link from "next/link";
-import { useContext } from "react";
 
 import type { Config, Genre, SearchResults, SearchResult } from "../types";
 
-import { FirebaseContext } from "../app/firebase-provider";
 import { font } from "./font";
 import { PosterImage } from "./poster-image";
 import { Facts } from "./display-facts";
-import { triggerParty } from "./party";
 import styles from "./display.module.css";
 import { AllInformation } from "./all-information";
+import { ToggleToList } from "./toggle-to-list";
+import { WebShare } from "./web-share";
 
 export function DisplaySearchResults({
   data,
@@ -103,34 +102,28 @@ function AboutMedia({
   config: Config;
   loadOnIntersection: boolean;
 }) {
-  const { list, addToList, removeFromList } = useContext(FirebaseContext);
-  const onListAlready = new Set(list.map((r) => r.result.id)).has(result.id);
-
   return (
     <div>
-      <button
-        data-testid="display-toggle"
-        onClick={(event) => {
-          if (onListAlready) {
-            removeFromList(result);
-          } else {
-            addToList(result).then(() => {
-              triggerParty(event.target as HTMLElement);
-            });
-          }
-        }}
-      >
-        {onListAlready ? "Remove from your list" : "Add to my list"}
-      </button>
+      <ToggleToList result={result} />
+      <WebShare result={result} />
       <br />
 
-      <Link
-        href={`/share/${mediaType}/${result.id}`}
-        role="button"
-        data-testid="share-link"
-      >
-        Share
-      </Link>
+      <p>
+        {/* <Link
+          href={`/share/${mediaType}/${result.id}`}
+          role="button"
+          data-testid="share-link"
+        >
+          Share
+        </Link>{" "} */}
+        <Link
+          href={`/share/${mediaType}/${result.id}`}
+          role="button"
+          data-testid="goto-link"
+        >
+          Go to
+        </Link>
+      </p>
 
       <Facts result={result} genres={genres} config={config} />
 

@@ -42,7 +42,7 @@ test("go to add page", async ({ page }) => {
   await expect(page).toHaveURL(/add/);
 });
 
-test("search and share", async ({ page }) => {
+test("search and goto", async ({ page }) => {
   await page.goto(BASE_URL + "/add");
   const input = page.getByTestId("add-search");
   await input.fill("departed");
@@ -51,10 +51,25 @@ test("search and share", async ({ page }) => {
 
   await expect(page.getByText("The Departed").nth(0)).toBeVisible();
   // Click the first search result
-  await page.getByTestId("share-link").nth(0).click();
+  await page.getByTestId("goto-link").nth(0).click();
   await expect(page).toHaveURL(/share\/movie\/\d+/);
 
   await expect(page).toHaveTitle(/The Departed/);
+});
+
+test("search and share", async ({ page }) => {
+  await page.goto(BASE_URL + "/add");
+  const input = page.getByTestId("add-search");
+  await input.fill("forrest gump");
+
+  await expect(page.getByText("Forrest Gump").nth(0)).toBeVisible();
+  // Click the first search result
+  await page.getByTestId("display-web-share").nth(0).click();
+  await expect(page.getByText("Share!")).toBeVisible();
+  await expect(page.getByText("Copy link to clipboard")).toBeVisible();
+  await page.getByText("Copy link to clipboard").click();
+  await expect(page.getByText("Copied!")).toBeVisible();
+  await page.getByText("Close").click();
 });
 
 test("search and add", async ({ page }) => {

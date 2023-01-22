@@ -7,8 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "prettier:write": "prettier --write src",
-    "prettier:check": "prettier --check src",
+    "prettier:write": "prettier --write src tests",
+    "prettier:check": "prettier --check src tests",
     "tsc": "tsc --noEmit",
     "emulate": "firebase emulators:start",
     "prepare": "husky install"
@@ -20,6 +20,7 @@
     "@types/react": "18.0.27",
     "@types/react-dom": "18.0.10",
     "axios": "1.2.3",
+    "copy-to-clipboard": "3.3.3",
     "encoding": "0.1.13",
     "eslint": "8.32.0",
     "eslint-config-next": "13.1.4",
