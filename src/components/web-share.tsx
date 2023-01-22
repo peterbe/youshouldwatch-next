@@ -135,7 +135,7 @@ export function WebShare({ result }: { result: SearchResult }) {
           if (canShare()) {
             const shareData = {
               title: result.title || result.name,
-              text: "I found something I think You Should Watch",
+              text: `You should watch: ${result.title || result.name}`,
               url: window.location.href,
             };
             navigator
