@@ -144,15 +144,19 @@ export default function FirebaseProvider({
         q,
         (snapshot) => {
           const results: StoredSearchResult[] = [];
+          const uniqueResultIds = new Set();
           snapshot.forEach((doc) => {
             // doc.data() is never undefined for query doc snapshots
             const data = doc.data();
+            // Second layer protection in case you get duplicates in Firebase
+            if (uniqueResultIds.has(data.result.id)) return;
             results.push({
               id: doc.id,
               added: data.added.toDate(),
               uid: data.uid,
               result: data.result,
             });
+            uniqueResultIds.add(data.result.id);
           });
           setList(results);
         },
@@ -194,10 +198,8 @@ export default function FirebaseProvider({
   }, [user, db, temporaryList]);
 
   const listIds = list.map((x) => x.result.id);
-  const combinedList = [
-    ...list,
-    ...temporaryList.filter((x) => !listIds.includes(x.result.id)),
-  ];
+  const remaining = temporaryList.filter((x) => !listIds.includes(x.result.id));
+  const combinedList = [...list, ...remaining];
 
   const firebase: Interface = {
     user,

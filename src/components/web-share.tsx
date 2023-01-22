@@ -19,7 +19,7 @@ function canShare() {
 }
 export function WebShare({ result }: { result: SearchResult }) {
   const [displayModal, setDisplayModal] = useState(false);
-  const [shareError, setShareError] = useState<Error | null>(null);
+  // const [shareError, setShareError] = useState<Error | null>(null);
   const [shared, setShared] = useState(false);
   const [copied, setCopied] = useState(false);
   const [copiedOnce, setCopiedOnce] = useState(false);
@@ -100,6 +100,8 @@ export function WebShare({ result }: { result: SearchResult }) {
               <button
                 onClick={() => {
                   const x = copy(getTextareaText());
+                  console.log("X:", x);
+
                   setCopied(true);
                 }}
               >
@@ -140,11 +142,11 @@ export function WebShare({ result }: { result: SearchResult }) {
               .share(shareData)
               .then(() => {
                 setShared(true);
+                triggerParty(event.target as HTMLElement);
               })
               .catch((err) => {
-                console.log("R", err);
-
-                setShareError(err);
+                console.warn("Share error", err);
+                // setShareError(err);
               });
           } else {
             setDisplayModal(true);
