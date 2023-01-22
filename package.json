@@ -7,8 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "prettier:write": "prettier --write src",
-    "prettier:check": "prettier --check src",
+    "prettier:write": "prettier --write src tests",
+    "prettier:check": "prettier --check src tests",
     "tsc": "tsc --noEmit",
     "emulate": "firebase emulators:start",
     "prepare": "husky install"
