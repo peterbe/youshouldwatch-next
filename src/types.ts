@@ -191,10 +191,4 @@ export type AllDetails = MediaDetails & {
     total_results: number;
     results: SearchResult[];
   };
-  // similar: {
-  //   page: number;
-  //   total_pages: number;
-  //   total_results: number;
-  //   results: SearchResult[];
-  // };
 };
