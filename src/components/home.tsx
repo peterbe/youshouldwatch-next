@@ -1,10 +1,11 @@
 "use client";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { font } from "./font";
 import { FirebaseContext } from "../app/firebase-provider";
 import { DisplayResult } from "./display-search-result";
 import type { StoredSearchResult, Config, Genre, Languages } from "../types";
 import Link from "next/link";
+import { usePathname, useSearchParams } from "next/navigation";
 
 type Props = {
   config: Config;
@@ -12,23 +13,62 @@ type Props = {
 };
 
 export function Home({ config, genres }: Props) {
-  const { user, list, isLoading } = useContext(FirebaseContext);
+  // const [showListArchive, setShowListArchive] = useState(false);
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const { user, list, listArchive, isLoading } = useContext(FirebaseContext);
+
+  const showListArchive = searchParams.get("show") === "archive";
+
+  let toggleShowArchiveURL = pathname || ".";
+  if (!showListArchive) {
+    toggleShowArchiveURL += "?show=archive";
+  }
+  toggleShowArchiveURL += "#list";
+
+  const showList = showListArchive ? listArchive : list;
 
   return (
     <div>
-      <h1 className={font.className}>You Should Watch</h1>
+      {showList.length === 0 && (
+        <h1 className={font.className}>You Should Watch</h1>
+      )}
 
       {isLoading && <p aria-busy="true">Hang on...</p>}
 
       {!isLoading && !user && list && list.length > 1 && <AnonymousWarning />}
 
-      {list.length === 0 && !isLoading && <Empty />}
-
-      {list.length > 0 && (
-        <ShowList results={list} config={config} genres={genres} />
+      {showList.length === 0 && !isLoading && (
+        <Empty archiveCount={listArchive.length} />
       )}
 
-      {!user && !list.length && <HowItWorks />}
+      {listArchive.length > 0 && showListArchive && (
+        <Link href={toggleShowArchiveURL} role="button" className="secondary">
+          Close previously checked off ({listArchive.length})
+        </Link>
+      )}
+
+      {showList.length > 0 && (
+        <ShowList
+          results={showList}
+          config={config}
+          genres={genres}
+          isArchive={showListArchive}
+        />
+      )}
+
+      {listArchive.length > 0 && !showListArchive && (
+        <Link
+          href={toggleShowArchiveURL}
+          role="button"
+          className="secondary"
+          data-testid="close-checked-off"
+        >
+          Show previously checked off ({listArchive.length})
+        </Link>
+      )}
+
+      {!user && !showList.length && <HowItWorks />}
     </div>
   );
 }
@@ -37,19 +77,27 @@ function ShowList({
   results,
   config,
   genres,
+  isArchive,
 }: {
   results: StoredSearchResult[];
   config: Config;
   genres: Genre;
+  isArchive: boolean;
 }) {
   return (
     <div>
+      <h1 id="list" className={font.className}>
+        {isArchive ? "Your Checked Off List" : "Your Watch List"}
+      </h1>
+
       {results.map((result, i) => (
         <DisplayResult
           key={result.id}
           index={i}
           config={config}
           result={result.result}
+          added={result.added}
+          isArchive={isArchive}
           genres={genres}
           loadOnIntersection={false}
         />
@@ -58,10 +106,18 @@ function ShowList({
   );
 }
 
-function Empty() {
+function Empty({ archiveCount }: { archiveCount: number }) {
   return (
     <article>
-      <i>You currently have no movies or TV shows on your list</i>
+      <p>
+        <i>You currently have no movies or TV shows on your list</i>
+      </p>
+      {archiveCount > 0 && (
+        <p>
+          You have <b>{archiveCount}</b> previously checked off movies or TV
+          shows
+        </p>
+      )}
     </article>
   );
 }

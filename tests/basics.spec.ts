@@ -120,6 +120,26 @@ test("add to temporary list, then sign in", async ({ page }) => {
   expect(mentions).toBe(1);
 });
 
+test("sign in, add to list, check off, view archive", async ({ page }) => {
+  await googleAuth(page);
+  await page.goto(BASE_URL + "/add");
+  const input = page.getByTestId("add-search");
+  await input.fill("forrest gump");
+  await input.press("Enter");
+  await expect(page.getByText("Forrest Gump").nth(0)).toBeVisible();
+
+  await page.getByText("Add to my list").nth(0).click();
+  await page.getByTestId("home-link").click();
+  await expect(page.getByText("Forrest Gump").nth(0)).toBeVisible();
+  await page.getByText("Check off").click();
+
+  await expect(page.getByText("Forrest Gump").nth(0)).not.toBeVisible();
+  await page.getByText("Show previously checked off").click();
+  await expect(page.getByText("Forrest Gump").nth(0)).toBeVisible();
+  await page.getByText("Close previously checked off").click();
+  await expect(page.getByText("Forrest Gump").nth(0)).not.toBeVisible();
+});
+
 async function googleAuth(page: Page) {
   await page.goto(BASE_URL + "/");
   await page.getByTestId("nav-auth").nth(0).click();
