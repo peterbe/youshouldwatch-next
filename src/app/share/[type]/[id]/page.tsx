@@ -12,7 +12,13 @@ export default async function Page({
     id: string;
   };
 }) {
-  if (!(params.type === "movie" || params.type === "tv")) {
+  if (
+    !(
+      params.type === "movie" ||
+      params.type === "tv" ||
+      params.type === "person"
+    )
+  ) {
     return notFound();
   }
   const mediaType: MediaType = params.type;

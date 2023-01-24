@@ -49,7 +49,10 @@ export default async function handler(
     res.status(200).json(r);
   } else if (lookup === "alldetails") {
     let { id, mediaType } = req.query;
-    if (typeof mediaType !== "string" || !["movie", "tv"].includes(mediaType)) {
+    if (
+      typeof mediaType !== "string" ||
+      !["movie", "tv", "person"].includes(mediaType)
+    ) {
       return res.status(400).json({ error: `mediaType (${mediaType})` });
     }
 
@@ -60,6 +63,8 @@ export default async function handler(
     const r = await getAllDetails(mediaType as MediaType, idInt);
 
     res.setHeader("cache-control", "public,max-age=3600");
+    console.log(r);
+
     res.status(200).json(r);
   } else {
     console.warn(`Unrecognized lookup '${lookup}'`);
