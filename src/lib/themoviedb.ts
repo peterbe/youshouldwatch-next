@@ -105,16 +105,23 @@ export const getAllDetails = cache(async (mediaType: MediaType, id: number) => {
   }
   const sp = new URLSearchParams({ api_key: API_KEY });
 
-  const extra = [
-    // "external_ids",
-    // "images",
-    // "keywords",
-    "recommendations",
-    // "reviews",
-    // "similar",
-    "videos",
-    "credits",
-  ];
+  const extra = [];
+  if (mediaType === "person") {
+    extra.push(...["movie_credits", "tv_credits", "images"]);
+  } else {
+    extra.push(
+      ...[
+        // "external_ids",
+        // "images",
+        // "keywords",
+        "recommendations",
+        // "reviews",
+        // "similar",
+        "videos",
+        "credits",
+      ]
+    );
+  }
   sp.set("append_to_response", extra.join(","));
   const url = `https://api.themoviedb.org/3/${mediaType}/${id}?${sp}`;
   console.time(url.replace(API_KEY, "***"));

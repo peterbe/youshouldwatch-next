@@ -4,14 +4,27 @@ import Link from "next/link";
 import useSWR from "swr";
 import LiteYouTubeEmbed from "react-lite-youtube-embed";
 
-import type { Config, Genre, SearchResult, AllDetails } from "../types";
+import type {
+  Config,
+  Genre,
+  SearchResult,
+  AllDetails,
+  MediaType,
+  Credit,
+} from "../types";
 import { DisplayError } from "./display-error";
 import { SimplePosterImage } from "./poster-image";
 import useIntersectionObserver from "./use-intersection-observer-hook";
 import styles from "./all-information.module.css";
 import { font } from "./font";
 
-const fetcher = (url: string) => fetch(url).then((r) => r.json());
+const fetcher = (url: string) =>
+  fetch(url).then((r) => {
+    if (!r.ok) {
+      throw new Error(`${r.status} on ${url}`);
+    }
+    return r.json();
+  });
 
 export function AllInformation({
   result,
@@ -23,7 +36,7 @@ export function AllInformation({
   result: SearchResult;
   genres: Genre;
   config: Config;
-  mediaType: "movie" | "tv";
+  mediaType: "movie" | "tv" | "person";
   loadOnIntersection: boolean;
 }) {
   const [load, setLoad] = useState(false);
@@ -59,7 +72,9 @@ export function AllInformation({
 
   return (
     <div ref={ref}>
-      {data && <DisplayAllData data={data} config={config} />}
+      {data && (
+        <DisplayAllData data={data} config={config} mediaType={mediaType} />
+      )}
       {error && (
         <DisplayError
           error={error}
@@ -87,13 +102,14 @@ export function AllInformation({
 function DisplayAllData({
   data,
   config,
+  mediaType,
 }: {
   data: AllDetails;
   config: Config;
+  mediaType: MediaType;
 }) {
   const [cappedCast, setCappedCast] = useState(4);
   const [cappedVideos, setCappedVideos] = useState(2);
-  const [cappedRecommendations, setCappedRecommendations] = useState(4);
 
   const youTubeVideos =
     data.videos && data.videos.results
@@ -104,33 +120,51 @@ function DisplayAllData({
     ? data.recommendations.results
     : [];
 
+  const credits: Credit[] = [];
+  let creditType: MediaType = mediaType;
+
+  if (data.credits && data.credits.cast) {
+    credits.push(...data.credits.cast);
+    creditType = "person";
+  } else if (data.movie_credits && data.movie_credits.cast) {
+    credits.push(...data.movie_credits.cast);
+    creditType = "movie";
+  } else if (data.tv_credits && data.tv_credits.cast) {
+    credits.push(...data.tv_credits.cast);
+    creditType = "tv";
+  }
+
   return (
     <div>
-      {data.credits && data.credits.cast && data.credits.cast.length > 0 && (
+      {credits.length > 0 && (
         <div className={styles.list_data}>
           <h3 className={font.className}>Cast</h3>
           <div
             className={
-              Math.min(data.credits.cast.length, cappedCast) <= 4
-                ? "grid"
-                : undefined
+              Math.min(credits.length, cappedCast) <= 4 ? "grid" : undefined
             }
           >
-            {data.credits.cast.slice(0, cappedCast).map((cast) => {
+            {credits.slice(0, cappedCast).map((cast) => {
               return (
                 <div key={cast.id}>
-                  {cast.profile_path && (
-                    <SimplePosterImage
-                      profile_path={cast.profile_path}
-                      alt={cast.name}
-                      config={config}
-                    />
-                  )}
-                  <b>{cast.name}</b>
+                  <Link href={`/share/${creditType}/${cast.id}`}>
+                    {(cast.profile_path ||
+                      cast.backdrop_path ||
+                      cast.poster_path) && (
+                      <SimplePosterImage
+                        profile_path={cast.profile_path}
+                        backdrop_path={cast.backdrop_path}
+                        poster_path={cast.poster_path}
+                        alt={cast.name}
+                        config={config}
+                      />
+                    )}
+                    <b>{cast.title || cast.name}</b>
+                  </Link>
                 </div>
               );
             })}
-            {data.credits.cast.length > cappedCast && (
+            {credits.length > cappedCast && (
               <button
                 className="secondary"
                 onClick={() => {
@@ -181,57 +215,12 @@ function DisplayAllData({
         </div>
       )}
 
-      {recommendations.length > 0 && (
-        <div className={styles.list_data}>
-          <h3 className={font.className}>Recommendations</h3>
-          <div
-            className={
-              Math.min(recommendations.length, cappedRecommendations) <= 4
-                ? "grid"
-                : undefined
-            }
-          >
-            {recommendations.slice(0, cappedRecommendations).map((result) => {
-              const url = `/share/${result.media_type}/${result.id}`;
-              return (
-                <div key={result.id}>
-                  <Link href={url}>
-                    {result.poster_path ? (
-                      <SimplePosterImage
-                        poster_path={result.poster_path}
-                        alt={result.title || result.name}
-                        config={config}
-                      />
-                    ) : result.backdrop_path ? (
-                      <SimplePosterImage
-                        backdrop_path={result.backdrop_path}
-                        alt={result.title || result.name}
-                        config={config}
-                      />
-                    ) : (
-                      result.title || result.name
-                    )}
-                  </Link>
-
-                  <Link href={url}>
-                    <b>{result.title || result.name}</b>
-                  </Link>
-                </div>
-              );
-            })}
-            {recommendations.length > cappedCast && (
-              <button
-                className="secondary"
-                onClick={() => {
-                  setCappedRecommendations((p) => p + 5);
-                }}
-              >
-                Load more recommendations
-              </button>
-            )}
-          </div>
-        </div>
-      )}
+      <ResultSublist
+        results={recommendations}
+        title="Recommendations"
+        config={config}
+        defaultCapped={4}
+      />
 
       {data.homepage && (
         <p>
@@ -243,7 +232,9 @@ function DisplayAllData({
       {data.imdb_id && (
         <p>
           <a
-            href={`https://www.imdb.com/title/${data.imdb_id}/`}
+            href={`https://www.imdb.com/${
+              mediaType === "person" ? "name" : "title"
+            }/${data.imdb_id}/`}
             target="_blank"
             rel="noreferrer"
           >
@@ -251,6 +242,69 @@ function DisplayAllData({
           </a>
         </p>
       )}
+    </div>
+  );
+}
+
+function ResultSublist({
+  results,
+  title,
+  defaultCapped,
+  config,
+}: {
+  results: SearchResult[];
+  defaultCapped: number;
+  config: Config;
+  title: string;
+}) {
+  const [capped, setCapped] = useState(defaultCapped);
+  if (!results.length) return null;
+
+  return (
+    <div className={styles.list_data}>
+      <h3 className={font.className}>Recommendations</h3>
+      <div
+        className={Math.min(results.length, capped) <= 4 ? "grid" : undefined}
+      >
+        {results.slice(0, capped).map((result) => {
+          const url = `/share/${result.media_type}/${result.id}`;
+          return (
+            <div key={result.id}>
+              <Link href={url}>
+                {result.poster_path ? (
+                  <SimplePosterImage
+                    poster_path={result.poster_path}
+                    alt={result.title || result.name}
+                    config={config}
+                  />
+                ) : result.backdrop_path ? (
+                  <SimplePosterImage
+                    backdrop_path={result.backdrop_path}
+                    alt={result.title || result.name}
+                    config={config}
+                  />
+                ) : (
+                  result.title || result.name
+                )}
+              </Link>
+
+              <Link href={url}>
+                <b>{result.title || result.name}</b>
+              </Link>
+            </div>
+          );
+        })}
+        {results.length > capped && (
+          <button
+            className="secondary"
+            onClick={() => {
+              setCapped((p) => p + 5);
+            }}
+          >
+            Load more {title.toLowerCase()}
+          </button>
+        )}
+      </div>
     </div>
   );
 }

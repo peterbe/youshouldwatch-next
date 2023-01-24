@@ -13,7 +13,7 @@ export function Facts({
   genres: Genre;
   config: Config;
 }) {
-  const resolvedGenres = (result.genre_ids || [])
+  const resolvedGenres = Array.from(new Set(result.genre_ids || []))
     .map((id) => genres[id])
     .filter(Boolean);
 
@@ -28,6 +28,24 @@ export function Facts({
         <p>
           <b>Overview</b>
           <i>{result.overview}</i>
+        </p>
+      )}
+      {result.biography && (
+        <p>
+          <b>Biography</b>
+          <i>{result.biography}</i>
+        </p>
+      )}
+      {result.birthday && (
+        <p>
+          <b>Birthday</b>
+          <i>{result.birthday}</i> <YearsAgo date={result.birthday} />
+        </p>
+      )}
+      {result.deathday && (
+        <p>
+          <b>Died</b>
+          <i>{result.deathday}</i> <YearsAgo date={result.deathday} />
         </p>
       )}
       {result.known_for && result.known_for.length > 0 && (
@@ -106,7 +124,13 @@ function KnownFor({
   );
 }
 function YearsAgo({ date }: { date: string }) {
-  const d = new Date(date);
+  if (!date) return null;
+  let d: Date | null = null;
+  try {
+    d = new Date(date);
+  } catch {
+    return null;
+  }
   const ageSeconds = (new Date().getTime() - d.getTime()) / 1000;
 
   const future = ageSeconds < 0;

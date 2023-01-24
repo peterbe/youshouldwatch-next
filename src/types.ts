@@ -1,4 +1,4 @@
-export type MediaType = "movie" | "tv";
+export type MediaType = "movie" | "tv" | "person";
 
 export type Config = {
   change_keys: string[];
@@ -26,7 +26,7 @@ export type SearchResult = {
   media_type: string; // should it be 'movie' | 'tvshow' ...
   original_language: string | null;
   original_title: string | null;
-  overview: string | null;
+  overview?: string | null;
   popularity: number;
   poster_path: string | null;
   release_date: string | null;
@@ -36,7 +36,12 @@ export type SearchResult = {
   vote_average: number | null;
   vote_count: number | null;
   first_air_date?: string;
+
+  // Person related ones
   known_for?: SearchResult[];
+  biography?: string;
+  birthday?: string;
+  deathday?: string | null;
 };
 
 export type SearchResults = {
@@ -123,13 +128,18 @@ export type MediaDetails = Genres & {
   video: boolean;
   vote_average?: number;
   vote_count?: number;
+
+  // Person related ones
+  biography?: string | null;
+  birthday?: string | null;
+  deathday?: string | null;
 };
 
 export type MovieData = MediaDetails & {};
 
 export type TVData = MediaDetails & {};
 
-type Credit = {
+export type Credit = {
   adult: boolean;
   character: string;
   credit_id: string;
@@ -137,10 +147,13 @@ type Credit = {
   id: number;
   known_for_department: string;
   name: string;
+  title?: string;
   order: number;
   original_name: string;
   popularity: number;
   profile_path: string | null;
+  poster_path: string | null;
+  backdrop_path: string | null;
 };
 
 type Video = {
@@ -157,14 +170,22 @@ type Video = {
 };
 
 export type AllDetails = MediaDetails & {
-  credits: {
+  credits?: {
     cast?: Credit[];
     crew?: Credit[];
   };
-  videos: {
+  movie_credits?: {
+    cast?: Credit[];
+    crew?: Credit[];
+  };
+  tv_credits?: {
+    cast?: Credit[];
+    crew?: Credit[];
+  };
+  videos?: {
     results: Video[];
   };
-  recommendations: {
+  recommendations?: {
     page: number;
     total_pages: number;
     total_results: number;

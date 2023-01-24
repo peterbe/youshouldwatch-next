@@ -101,9 +101,9 @@ export function SimplePosterImage({
 }: {
   config: Config;
   alt?: string;
-  backdrop_path?: string;
-  poster_path?: string;
-  profile_path?: string;
+  backdrop_path?: string | null;
+  poster_path?: string | null;
+  profile_path?: string | null;
   lazyLoad?: boolean;
 }) {
   if (!backdrop_path && !poster_path && !profile_path) {

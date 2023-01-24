@@ -98,7 +98,12 @@ export function DisplayResult({
         />
       )}
       {isPerson && (
-        <AboutPerson result={result} genres={genres} config={config} />
+        <AboutPerson
+          result={result}
+          genres={genres}
+          config={config}
+          loadOnIntersection={loadOnIntersection}
+        />
       )}
     </article>
   );
@@ -126,13 +131,6 @@ function AboutMedia({
       <br />
 
       <p>
-        {/* <Link
-          href={`/share/${mediaType}/${result.id}`}
-          role="button"
-          data-testid="share-link"
-        >
-          Share
-        </Link>{" "} */}
         <Link
           href={`/share/${mediaType}/${result.id}`}
           role="button"
@@ -159,14 +157,33 @@ function AboutPerson({
   result,
   genres,
   config,
+  loadOnIntersection,
 }: {
   result: SearchResult;
   genres: Genre;
   config: Config;
+  loadOnIntersection: boolean;
 }) {
   return (
     <div>
+      <p>
+        <Link
+          href={`/share/person/${result.id}`}
+          role="button"
+          data-testid="goto-link"
+        >
+          Go to
+        </Link>
+      </p>
       <Facts result={result} genres={genres} config={config} />
+
+      <AllInformation
+        mediaType="person"
+        result={result}
+        genres={genres}
+        config={config}
+        loadOnIntersection={loadOnIntersection}
+      />
     </div>
   );
 }

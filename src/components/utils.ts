@@ -9,11 +9,11 @@ export function detailsToSearchResult(
     backdrop_path: details.backdrop_path || null,
     poster_path: details.poster_path || null,
     profile_path: details.profile_path || null,
-    genre_ids: details.genres.map((g) => g.id),
+    genre_ids: (details.genres || []).map((g) => g.id),
     id: details.id,
     original_language: details.original_language || null,
     original_title: details.original_title || null,
-    overview: details.overview,
+    // overview: details.overview,
     popularity: details.popularity,
     release_date: details.release_date || null,
     // title: details.title,
@@ -26,6 +26,10 @@ export function detailsToSearchResult(
   if (details.name) result.name = details.name;
   if (details.title) result.title = details.title;
   if (details.video) result.video = details.video;
+  if (details.overview) result.overview = details.overview;
+  if (details.biography) result.biography = details.biography;
+  if (details.birthday) result.birthday = details.birthday;
+  if (details.deathday) result.deathday = details.deathday;
 
   Object.entries(result).forEach(([key, value]) => {
     if (value === undefined) {
