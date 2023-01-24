@@ -9,6 +9,7 @@ import styles from "./display.module.css";
 import { AllInformation } from "./all-information";
 import { ToggleToList } from "./toggle-to-list";
 import { WebShare } from "./web-share";
+import { TimeAgo } from "./timeago";
 
 export function DisplaySearchResults({
   data,
@@ -45,6 +46,8 @@ export function DisplayResult({
   genres,
   mediaType,
   loadOnIntersection,
+  added,
+  isArchive,
 }: {
   result: SearchResult;
   index: number;
@@ -52,6 +55,8 @@ export function DisplayResult({
   genres: Genre;
   mediaType?: "movie" | "tv" | "";
   loadOnIntersection: boolean;
+  added?: Date | null;
+  isArchive?: boolean;
 }) {
   // When you make a Multi search, each result will have a `media_type`
   // which will be 'movie', 'tv', or 'person'.
@@ -72,6 +77,15 @@ export function DisplayResult({
         <h3>{mediaType_}</h3>
       </hgroup>
 
+      {isArchive && added && (
+        <p>
+          Checked off{" "}
+          <b>
+            <TimeAgo date={added} />
+          </b>
+        </p>
+      )}
+
       <PosterImage index={index} result={result} config={config} />
       {isMovieOrTV && (
         <AboutMedia
@@ -80,6 +94,7 @@ export function DisplayResult({
           genres={genres}
           config={config}
           loadOnIntersection={loadOnIntersection}
+          isArchive={isArchive}
         />
       )}
       {isPerson && (
@@ -95,16 +110,18 @@ function AboutMedia({
   genres,
   config,
   loadOnIntersection,
+  isArchive,
 }: {
   result: SearchResult;
   mediaType: "movie" | "tv";
   genres: Genre;
   config: Config;
   loadOnIntersection: boolean;
+  isArchive?: boolean;
 }) {
   return (
     <div>
-      <ToggleToList result={result} />
+      <ToggleToList result={result} isArchive={isArchive} />
       <WebShare result={result} />
       <br />
 

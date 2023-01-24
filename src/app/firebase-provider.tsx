@@ -54,8 +54,10 @@ type Interface = {
   auth: Auth | null;
   signOut: () => Promise<void>;
   list: StoredSearchResult[];
+  listArchive: StoredSearchResult[];
   addToList: (x: SearchResult) => Promise<void>;
   removeFromList: (x: SearchResult) => Promise<void>;
+  checkOffFromList: (x: SearchResult) => Promise<void>;
   isLoading: boolean;
   firebaseError: Error | null;
   resetFirebaseError: () => void;
@@ -65,8 +67,10 @@ export const FirebaseContext = createContext<Interface>({
   auth: null,
   signOut: async () => {},
   list: [],
+  listArchive: [],
   addToList: async () => {},
   removeFromList: async () => {},
+  checkOffFromList: async () => {},
   isLoading: true,
   firebaseError: null,
   resetFirebaseError: async () => {},
@@ -79,6 +83,7 @@ export default function FirebaseProvider({
 }) {
   const [error, setError] = useState<Error | null>(null);
   const [list, setList] = useState<StoredSearchResult[]>([]);
+  const [listArchive, setListArchive] = useState<StoredSearchResult[]>([]);
   const { temporaryList, setTemporaryList, clearTemporaryList } =
     useTemporaryList();
 
@@ -133,7 +138,6 @@ export default function FirebaseProvider({
   useEffect(() => {
     let unsubscribe: Unsubscribe | null = null;
     if (db && user) {
-      // Create a listener
       const q = query(
         collection(db, "list"),
         where("uid", "==", user.uid),
@@ -159,6 +163,47 @@ export default function FirebaseProvider({
             uniqueResultIds.add(data.result.id);
           });
           setList(results);
+        },
+        (err) => {
+          if (err instanceof Error) {
+            setError(err);
+          } else {
+            throw err;
+          }
+        }
+      );
+    }
+    return () => {
+      if (unsubscribe) unsubscribe();
+    };
+  }, [db, user]);
+
+  useEffect(() => {
+    let unsubscribe: Unsubscribe | null = null;
+    if (db && user) {
+      const q = query(
+        collection(db, "listarchive"),
+        where("uid", "==", user.uid),
+        orderBy("added", "desc")
+      );
+
+      unsubscribe = onSnapshot(
+        q,
+        (snapshot) => {
+          const results: StoredSearchResult[] = [];
+          const uniqueResultIds = new Set();
+          snapshot.forEach((doc) => {
+            const data = doc.data();
+            if (uniqueResultIds.has(data.result.id)) return;
+            results.push({
+              id: doc.id,
+              added: data.added.toDate(),
+              uid: data.uid,
+              result: data.result,
+            });
+            uniqueResultIds.add(data.result.id);
+          });
+          setListArchive(results);
         },
         (err) => {
           if (err instanceof Error) {
@@ -209,6 +254,7 @@ export default function FirebaseProvider({
       else alert("Couldn't sign out");
     },
     list: combinedList,
+    listArchive,
     addToList: async (result: SearchResult) => {
       if (user && db) {
         try {
@@ -216,13 +262,15 @@ export default function FirebaseProvider({
             uid: user.uid,
             added: new Date(),
             result,
-          }).catch((err) => {
-            if (err instanceof Error) {
-              setError(err);
-            } else {
-              throw err;
-            }
-          });
+          })
+            .then(() => {})
+            .catch((err) => {
+              if (err instanceof Error) {
+                setError(err);
+              } else {
+                throw err;
+              }
+            });
         } catch (err) {
           if (err instanceof Error) {
             setError(err);
@@ -266,11 +314,23 @@ export default function FirebaseProvider({
         prevState.filter((x) => x.result.id !== result.id)
       );
       const found = list.find((x) => x.result.id === result.id);
-      if (db && found && found.id) {
+      if (db && found && found.id && user) {
         deleteDoc(doc(db, "list", found.id))
           .then(() => {
             // deleted
             setUndoDelete(result);
+
+            addDoc(collection(db, "listarchive"), {
+              uid: user.uid,
+              added: new Date(),
+              result,
+            }).catch((err) => {
+              if (err instanceof Error) {
+                setError(err);
+              } else {
+                throw err;
+              }
+            });
           })
           .catch((err) => {
             if (err instanceof Error) {
@@ -282,6 +342,14 @@ export default function FirebaseProvider({
       } else {
         setUndoDelete(result);
       }
+    },
+    checkOffFromList: async (result: SearchResult) => {
+      // const found = list.find((x) => x.result.id === result.id);
+      // if (db && found && found.id) {
+      //   updateDoc(doc(db, "list", found.id), {
+      //     watched: new Date(),
+      //   });
+      // }
     },
     isLoading: !db || user === null,
     firebaseError: error,
