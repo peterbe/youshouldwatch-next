@@ -13,7 +13,13 @@ export default async function Head({
     id: string;
   };
 }) {
-  if (!(params.type === "movie" || params.type === "tv")) {
+  if (
+    !(
+      params.type === "movie" ||
+      params.type === "tv" ||
+      params.type === "person"
+    )
+  ) {
     return notFound();
   }
   const mediaType: MediaType = params.type;
@@ -43,9 +49,17 @@ export default async function Head({
     largest =
       config.images.poster_sizes.filter((x) => x !== "original").at(-1) ||
       "w500";
+  } else if (details.profile_path) {
+    largest =
+      config.images.profile_sizes.filter((x) => x !== "original").at(-1) ||
+      "w500";
   }
-  if (largest && (details.backdrop_path || details.poster_path)) {
-    const end = details.backdrop_path || details.poster_path;
+  if (
+    largest &&
+    (details.backdrop_path || details.poster_path || details.profile_path)
+  ) {
+    const end =
+      details.backdrop_path || details.poster_path || details.profile_path;
     imageUrl = imageStart + largest + end;
   }
 
