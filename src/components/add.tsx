@@ -98,11 +98,13 @@ function Form({
       <form
         onSubmit={(event) => {
           event.preventDefault();
-          const sp = new URLSearchParams({ search });
-          if (searchType) {
-            sp.set("type", searchType);
+          if (search.trim()) {
+            const sp = new URLSearchParams({ search });
+            if (searchType) {
+              sp.set("type", searchType);
+            }
+            router.push(`${pathname}?${sp}`);
           }
-          router.push(`${pathname}?${sp}`);
         }}
       >
         <input
@@ -113,6 +115,16 @@ function Form({
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           data-testid="add-search"
+          onBlur={() => {
+            const existing = searchParams.get("search") || "";
+            if (search !== existing) {
+              const sp = new URLSearchParams({ search });
+              if (searchType) {
+                sp.set("type", searchType);
+              }
+              router.replace(`${pathname}?${sp}`);
+            }
+          }}
         />
 
         <div className="grid">
