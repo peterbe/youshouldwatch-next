@@ -90,6 +90,17 @@ test("search and add", async ({ page }) => {
   await expect(page.getByText("The Departed").nth(0)).toBeVisible();
 });
 
+test("type search and blur the input", async ({ page }) => {
+  await page.goto(BASE_URL + "/");
+  await page.getByTestId("nav-add").click();
+  const input = page.getByTestId("add-search");
+  await input.fill("departed");
+  await input.blur(); // Not the lack of .press("Enter")
+  await expect(page).toHaveURL(/add\?search=departed/);
+  await page.goBack();
+  await expect(page).toHaveURL(BASE_URL + "/");
+});
+
 test("authenticate with Firebase emulator auth", async ({ page }) => {
   await googleAuth(page);
   await expect(page.getByTestId("nav-signed-in")).toBeVisible();

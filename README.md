@@ -37,6 +37,9 @@ To install the Playwright browsers, if you haven't already done so:
 pnpm dlx playwright install
 ```
 
+NOTE! ^ This is necessary after you've updated the
+`@playwright/test` version.
+
 ```sh
 Inside that directory, you can run several commands:
 
