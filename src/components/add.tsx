@@ -6,13 +6,19 @@ import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import useSWR from "swr";
 
 import { useDebounce } from "../app/hooks";
-import type { Config, Genre, Languages, SearchResults } from "../types";
+import type {
+  Config,
+  Genre,
+  Languages,
+  SearchResults,
+  SearchType,
+} from "../types";
 
 import { font } from "./font";
 import { DisplaySearchResults } from "./display-search-result";
 import styles from "./add.module.css";
-
-const fetcher = (url: string) => fetch(url).then((r) => r.json());
+import { DisplayError } from "./display-error";
+import { fetcher } from "./utils";
 
 type Props = {
   config: Config;
@@ -46,8 +52,10 @@ function Form({
   const [search, setSearch] = useState(initialSearch || "");
   const debouncedSearch = useDebounce(search, 200);
   const initialSearchType = searchParams.get("type");
-  const [searchType, setSearchType] = useState<"" | "movie" | "tv">(
-    initialSearchType === "movie" || initialSearchType === "tv"
+  const [searchType, setSearchType] = useState<SearchType>(
+    initialSearchType === "movie" ||
+      initialSearchType === "tv" ||
+      initialSearchType === "person"
       ? initialSearchType
       : ""
   );
@@ -163,6 +171,17 @@ function Form({
                 />
                 TV show
               </label>
+              <label htmlFor="type_person" className={styles.type_label}>
+                <input
+                  type="radio"
+                  id="type_person"
+                  name="type"
+                  value="person"
+                  checked={searchType === "person"}
+                  onChange={() => setSearchType("person")}
+                />
+                Person
+              </label>
             </fieldset>
           </div>
           <div>
@@ -234,6 +253,16 @@ function Form({
       </form>
 
       {isLoading && !data && <article aria-busy="true">Loading</article>}
+
+      {error && (
+        <DisplayError
+          error={error}
+          title="Unable to complete the search"
+          closeError={() => {
+            window.location.reload();
+          }}
+        />
+      )}
 
       {data && !error && (
         <DisplaySearchResults

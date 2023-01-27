@@ -17,14 +17,7 @@ import { SimplePosterImage } from "./poster-image";
 import useIntersectionObserver from "./use-intersection-observer-hook";
 import styles from "./all-information.module.css";
 import { font } from "./font";
-
-const fetcher = (url: string) =>
-  fetch(url).then((r) => {
-    if (!r.ok) {
-      throw new Error(`${r.status} on ${url}`);
-    }
-    return r.json();
-  });
+import { fetcher } from "./utils";
 
 export function AllInformation({
   result,

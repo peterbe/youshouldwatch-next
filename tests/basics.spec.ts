@@ -192,3 +192,16 @@ test("searching for the TV show 'departed' and copy to clipboard", async ({
   await page.getByRole("button", { name: "Copy link to clipboard" }).click();
   await page.getByRole("button", { name: "Close" }).click();
 });
+
+test("test", async ({ page }) => {
+  await page.goto(BASE_URL);
+  await page.getByTestId("nav-add").click();
+  await page.getByTestId("add-search").click();
+  await page.getByTestId("add-search").fill("sergio");
+  await page.getByLabel("Person").check();
+  await page
+    .getByRole("article")
+    .filter({ hasText: "Sergio Leone" })
+    .getByTestId("goto-link")
+    .click();
+});

@@ -25,7 +25,7 @@ export default async function handler(
       searchType = "multi";
     }
 
-    if (!["multi", "movie", "tv"].includes(searchType)) {
+    if (!["multi", "movie", "tv", "person"].includes(searchType)) {
       return res.status(400).json({ error: `'query'` });
     }
     opts.searchType = searchType;
