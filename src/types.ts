@@ -1,4 +1,5 @@
 export type MediaType = "movie" | "tv" | "person";
+export type SearchType = "" | MediaType;
 
 export type Config = {
   change_keys: string[];

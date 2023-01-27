@@ -60,3 +60,11 @@ export function getLastLogin() {
     return "";
   }
 }
+
+export async function fetcher(url: string) {
+  const r = await fetch(url);
+  if (!r.ok) {
+    throw new Error(`${r.status} on ${url}`);
+  }
+  return await r.json();
+}

@@ -1,6 +1,12 @@
 import Link from "next/link";
 
-import type { Config, Genre, SearchResults, SearchResult } from "../types";
+import type {
+  Config,
+  Genre,
+  SearchResults,
+  SearchResult,
+  SearchType,
+} from "../types";
 
 import { font } from "./font";
 import { PosterImage } from "./poster-image";
@@ -20,7 +26,7 @@ export function DisplaySearchResults({
   data: SearchResults;
   config: Config;
   genres: Genre;
-  mediaType: "movie" | "tv" | "";
+  mediaType: SearchType;
 }) {
   return (
     <div>
@@ -53,7 +59,7 @@ export function DisplayResult({
   index: number;
   config: Config;
   genres: Genre;
-  mediaType?: "movie" | "tv" | "";
+  mediaType?: SearchType;
   loadOnIntersection: boolean;
   added?: Date | null;
   isArchive?: boolean;
