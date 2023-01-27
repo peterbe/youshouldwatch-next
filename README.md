@@ -29,6 +29,26 @@ pnpm run lint
 pnpm run build
 ```
 
+To run headless test automation:
+
+```sh
+pnpm run emulate
+```
+
+in another terminal:
+
+```sh
+pnpm run build
+pnpm run start
+```
+
+in a third terminal:
+
+```sh
+pnpm dlx playwright test
+```
+
+
 ## Running tests
 
 To install the Playwright browsers, if you haven't already done so:
