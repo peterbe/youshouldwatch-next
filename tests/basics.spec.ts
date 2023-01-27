@@ -173,3 +173,22 @@ async function googleAuth(page: Page) {
   await expect(page).toHaveURL(BASE_URL + "/signin");
   await expect(page.getByText("Signed in")).toBeVisible();
 }
+
+test("searching for the TV show 'departed' and copy to clipboard", async ({
+  page,
+}) => {
+  await page.goto(BASE_URL + "/");
+  await page.getByTestId("nav-add").click();
+  await page.getByTestId("add-search").click();
+  await page.getByTestId("add-search").fill("departed");
+  await page.getByLabel("TV show").check();
+  await page
+    .getByRole("article")
+    .filter({
+      hasText: "Shigofumi",
+    })
+    .getByTestId("display-web-share")
+    .click();
+  await page.getByRole("button", { name: "Copy link to clipboard" }).click();
+  await page.getByRole("button", { name: "Close" }).click();
+});

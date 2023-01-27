@@ -63,8 +63,6 @@ export default async function handler(
     const r = await getAllDetails(mediaType as MediaType, idInt);
 
     res.setHeader("cache-control", "public,max-age=3600");
-    console.log(r);
-
     res.status(200).json(r);
   } else {
     console.warn(`Unrecognized lookup '${lookup}'`);
