@@ -7,7 +7,7 @@ specifiers:
   '@types/node': 18.11.18
   '@types/react': 18.0.27
   '@types/react-dom': 18.0.10
-  axios: 1.2.4
+  axios: 1.2.5
   copy-to-clipboard: 3.3.3
   encoding: 0.1.13
   eslint: 8.32.0
@@ -22,7 +22,7 @@ specifiers:
   react-dom: 18.2.0
   react-lite-youtube-embed: 2.3.52
   sharp: 0.31.3
-  swr: 2.0.1
+  swr: 2.0.2
   typescript: 4.9.4
 
 dependencies:
@@ -31,7 +31,7 @@ dependencies:
   '@types/node': 18.11.18
   '@types/react': 18.0.27
   '@types/react-dom': 18.0.10
-  axios: 1.2.4
+  axios: 1.2.5
   copy-to-clipboard: 3.3.3
   encoding: 0.1.13
   eslint: 8.32.0
@@ -43,7 +43,7 @@ dependencies:
   react-dom: 18.2.0_react@18.2.0
   react-lite-youtube-embed: 2.3.52_biqbaboplfbrettd7655fr4n2y
   sharp: 0.31.3
-  swr: 2.0.1_react@18.2.0
+  swr: 2.0.2_react@18.2.0
   typescript: 4.9.4
 
 devDependencies:
@@ -1392,8 +1392,8 @@ packages:
     engines: {node: '>=4'}
     dev: false
 
-  /axios/1.2.4:
-    resolution: {integrity: sha512-lIQuCfBJvZB/Bv7+RWUqEJqNShGOVpk9v7P0ZWx5Ip0qY6u7JBAU6dzQPMLasU9vHL2uD8av/1FDJXj7n6c39w==}
+  /axios/1.2.5:
+    resolution: {integrity: sha512-9pU/8mmjSSOb4CXVsvGIevN+MlO/t9OWtKadTaLuN85Gge3HGorUckgp8A/2FH4V4hJ7JuQ3LIeI7KAV9ITZrQ==}
     dependencies:
       follow-redirects: 1.15.2
       form-data: 4.0.0
@@ -6030,8 +6030,8 @@ packages:
     engines: {node: '>= 0.4'}
     dev: false
 
-  /swr/2.0.1_react@18.2.0:
-    resolution: {integrity: sha512-6z4FpS9dKAay7axedlStsPahEw25nuMlVh4GHkuPpGptbmEEP8v/+kr0GkAE/7ErUs25U2VFOnZQz3AWfkmXdw==}
+  /swr/2.0.2_react@18.2.0:
+    resolution: {integrity: sha512-iHbQW17hsduonMEliZnr6/yaxb+yvLe2r0+AH+ZfeqKzwc2bb+QRYpZm5/b/H0Lxgy7VWow4o71JeSazSun+9A==}
     engines: {pnpm: '7'}
     peerDependencies:
       react: ^16.11.0 || ^17.0.0 || ^18.0.0
