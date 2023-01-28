@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import styles from "./footer.module.css";
 
 export function Footer() {
@@ -25,6 +26,15 @@ export function Footer() {
           Open Source on GitHub
         </a>
         <br />
+      </p>
+      <p>
+        <a href="https://www.themoviedb.org/" target="_blank" rel="noreferrer">
+          <Image src="/tmdb.svg" width={40} height={40} alt="TMDB" />
+        </a>{" "}
+        All movies, TV shows, and people comes from{" "}
+        <a href="https://www.themoviedb.org/" target="_blank" rel="noreferrer">
+          The Movie DB
+        </a>
       </p>
     </footer>
   );
