@@ -27,7 +27,7 @@ export function Footer() {
         </a>
         <br />
       </p>
-      <p>
+      <p style={{ marginTop: 20 }}>
         <a href="https://www.themoviedb.org/" target="_blank" rel="noreferrer">
           <Image src="/tmdb.svg" width={40} height={40} alt="TMDB" />
         </a>{" "}
@@ -35,6 +35,12 @@ export function Footer() {
         <a href="https://www.themoviedb.org/" target="_blank" rel="noreferrer">
           The Movie DB
         </a>
+        .
+        <br />
+        <small>
+          This product uses the TMDB API but is not endorsed or certified by
+          TMDB.
+        </small>
       </p>
     </footer>
   );
