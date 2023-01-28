@@ -216,3 +216,25 @@ test("searching and clicking the poster image", async ({ page }) => {
   await expect(page).toHaveURL(/share\/movie\/\d+/);
   await expect(page).toHaveTitle(/The Departed/);
 });
+
+test("searching for a tv show, adding it to list, and go to from home page", async ({
+  page,
+}) => {
+  await page.goto(BASE_URL);
+  await page.getByTestId("nav-add").click();
+  await page.getByTestId("add-search").click();
+  await page.getByTestId("add-search").fill("robert");
+  await page.getByLabel("TV show").check();
+  await page
+    .getByRole("article")
+    .filter({ hasText: "Robert Montgomery Presents" })
+    .getByTestId("display-toggle")
+    .click();
+
+  await page.goto(BASE_URL);
+  await page.getByTestId("home-link").click();
+  await page.getByTestId("poster-goto-link").click();
+  await expect(page).toHaveTitle(
+    /You Should Watch: Robert Montgomery Presents/
+  );
+});

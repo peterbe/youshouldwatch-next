@@ -34,12 +34,13 @@ export function Share({
 
       <PosterImage index={0} config={config} result={details} />
 
-      {(result.media_type == "movie" || result.media_type === "tv") && (
+      {(result.media_type === "movie" || result.media_type === "tv") && (
         <>
-          <ToggleToList result={result} />
+          <ToggleToList result={result} mediaType={mediaType} />
           <WebShare result={result} />
         </>
       )}
+      {result.media_type === "person" && <WebShare result={result} />}
 
       <Facts result={result} genres={genres} config={config} />
 

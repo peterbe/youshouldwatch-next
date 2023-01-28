@@ -256,6 +256,7 @@ export default function FirebaseProvider({
     list: combinedList,
     listArchive,
     addToList: async (result: SearchResult) => {
+      if (!result.media_type) throw new Error("no media type!");
       if (user && db) {
         try {
           addDoc(collection(db, "list"), {
@@ -279,11 +280,6 @@ export default function FirebaseProvider({
           }
         }
       } else {
-        // setList((prevState) => [
-        //   result,
-        //   ...prevState.filter((x) => x.id != result.id),
-        // ]);
-        // XXX Move this to the top of the function??
         setTemporaryList((prevState) => [
           {
             result,
@@ -294,22 +290,8 @@ export default function FirebaseProvider({
           ...prevState.filter((x) => x.result.id != result.id),
         ]);
       }
-
-      // if (!user && auth) {
-      //   // Force an anonymous sign in
-      //   try {
-      //     await signInAnonymously(auth);
-      //   } catch (err) {
-      //     if (err instanceof Error) {
-      //       setError(err);
-      //     } else {
-      //       throw err;
-      //     }
-      //   }
-      // }
     },
     removeFromList: async (result: SearchResult) => {
-      // setList((prevState) => prevState.filter((x) => x.id != result.id));
       setTemporaryList((prevState) =>
         prevState.filter((x) => x.result.id !== result.id)
       );
