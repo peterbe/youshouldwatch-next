@@ -92,7 +92,12 @@ export function DisplayResult({
         </p>
       )}
 
-      <PosterImage index={index} result={result} config={config} />
+      <Link
+        href={`/share/${mediaType_}/${result.id}`}
+        data-testid="poster-goto-link"
+      >
+        <PosterImage index={index} result={result} config={config} />
+      </Link>
       {isMovieOrTV && (
         <AboutMedia
           result={result}

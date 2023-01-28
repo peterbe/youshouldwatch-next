@@ -193,7 +193,7 @@ test("searching for the TV show 'departed' and copy to clipboard", async ({
   await page.getByRole("button", { name: "Close" }).click();
 });
 
-test("test", async ({ page }) => {
+test("searching for a person", async ({ page }) => {
   await page.goto(BASE_URL);
   await page.getByTestId("nav-add").click();
   await page.getByTestId("add-search").click();
@@ -204,4 +204,15 @@ test("test", async ({ page }) => {
     .filter({ hasText: "Sergio Leone" })
     .getByTestId("goto-link")
     .click();
+});
+
+test("searching and clicking the poster image", async ({ page }) => {
+  await page.goto(BASE_URL);
+  await page.getByTestId("nav-add").click();
+  await page.getByTestId("add-search").click();
+  await page.getByTestId("add-search").fill("departed");
+
+  await page.getByTestId("poster-goto-link").nth(0).click();
+  await expect(page).toHaveURL(/share\/movie\/\d+/);
+  await expect(page).toHaveTitle(/The Departed/);
 });
