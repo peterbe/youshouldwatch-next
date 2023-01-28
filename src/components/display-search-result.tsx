@@ -16,6 +16,7 @@ import { AllInformation } from "./all-information";
 import { ToggleToList } from "./toggle-to-list";
 import { WebShare } from "./web-share";
 import { TimeAgo } from "./timeago";
+import { CorruptMedia } from "./corrupt-media";
 
 export function DisplaySearchResults({
   data,
@@ -75,6 +76,14 @@ export function DisplayResult({
   const isMovieOrTV = mediaType_ == "movie" || mediaType_ === "tv";
   const isPerson = mediaType_ === "person";
 
+  // const isCorrupt = !result.media_type;
+  let isCorrupt = false;
+  if (mediaType_ && !result.media_type) {
+    result.media_type = mediaType_;
+  } else if (!mediaType_ && !result.media_type) {
+    isCorrupt = true;
+  }
+
   return (
     // IDEA: Perhaps set the fade in animation with IntersectionObserver
     <article className={styles.result}>
@@ -92,13 +101,18 @@ export function DisplayResult({
         </p>
       )}
 
-      <Link
-        href={`/share/${mediaType_}/${result.id}`}
-        data-testid="poster-goto-link"
-      >
+      {isCorrupt ? (
         <PosterImage index={index} result={result} config={config} />
-      </Link>
-      {isMovieOrTV && (
+      ) : (
+        <Link
+          href={`/share/${mediaType_}/${result.id}`}
+          data-testid="poster-goto-link"
+        >
+          <PosterImage index={index} result={result} config={config} />
+        </Link>
+      )}
+
+      {isMovieOrTV && !isCorrupt && (
         <AboutMedia
           result={result}
           mediaType={mediaType_}
@@ -108,7 +122,7 @@ export function DisplayResult({
           isArchive={isArchive}
         />
       )}
-      {isPerson && (
+      {isPerson && !isCorrupt && (
         <AboutPerson
           result={result}
           genres={genres}
@@ -116,6 +130,7 @@ export function DisplayResult({
           loadOnIntersection={loadOnIntersection}
         />
       )}
+      {isCorrupt && <CorruptMedia result={result} />}
     </article>
   );
 }
@@ -137,7 +152,11 @@ function AboutMedia({
 }) {
   return (
     <div>
-      <ToggleToList result={result} isArchive={isArchive} />
+      <ToggleToList
+        result={result}
+        isArchive={isArchive}
+        mediaType={mediaType}
+      />
       <WebShare result={result} />
       <br />
 

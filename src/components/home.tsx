@@ -1,11 +1,12 @@
 "use client";
-import { useContext, useState } from "react";
+import { useContext } from "react";
+import Link from "next/link";
+import { usePathname, useSearchParams } from "next/navigation";
+
 import { font } from "./font";
 import { FirebaseContext } from "../app/firebase-provider";
 import { DisplayResult } from "./display-search-result";
-import type { StoredSearchResult, Config, Genre, Languages } from "../types";
-import Link from "next/link";
-import { usePathname, useSearchParams } from "next/navigation";
+import type { StoredSearchResult, Config, Genre } from "../types";
 
 type Props = {
   config: Config;
@@ -13,7 +14,6 @@ type Props = {
 };
 
 export function Home({ config, genres }: Props) {
-  // const [showListArchive, setShowListArchive] = useState(false);
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { user, list, listArchive, isLoading } = useContext(FirebaseContext);
@@ -34,7 +34,7 @@ export function Home({ config, genres }: Props) {
         <h1 className={font.className}>You Should Watch</h1>
       )}
 
-      {isLoading && <p aria-busy="true">Hang on...</p>}
+      {isLoading && <Loading />}
 
       {!isLoading && !user && list && list.length > 1 && <AnonymousWarning />}
 
@@ -103,6 +103,14 @@ function ShowList({
         />
       ))}
     </div>
+  );
+}
+
+function Loading() {
+  return (
+    <article>
+      <p aria-busy="true">Hang on...</p>
+    </article>
   );
 }
 
