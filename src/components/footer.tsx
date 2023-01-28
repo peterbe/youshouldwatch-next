@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import styles from "./footer.module.css";
 
 export function Footer() {
@@ -25,6 +26,21 @@ export function Footer() {
           Open Source on GitHub
         </a>
         <br />
+      </p>
+      <p style={{ marginTop: 20 }}>
+        <a href="https://www.themoviedb.org/" target="_blank" rel="noreferrer">
+          <Image src="/tmdb.svg" width={40} height={40} alt="TMDB" />
+        </a>{" "}
+        All movies, TV shows, and people comes from{" "}
+        <a href="https://www.themoviedb.org/" target="_blank" rel="noreferrer">
+          The Movie DB
+        </a>
+        .
+        <br />
+        <small>
+          This product uses the TMDB API but is not endorsed or certified by
+          TMDB.
+        </small>
       </p>
     </footer>
   );
