@@ -135,6 +135,19 @@ export default function FirebaseProvider({
     }
   }, [user]);
 
+  const [excessDuplicateDocIds, setExcessDuplicateDocIds] = useState<string[]>(
+    []
+  );
+  useEffect(() => {
+    if (excessDuplicateDocIds.length > 0 && db) {
+      for (const id of excessDuplicateDocIds) {
+        deleteDoc(doc(db, "list", id)).then(() => {
+          console.log(`Deleted duplicate 'list' ID ${id}`);
+        });
+      }
+    }
+  }, [excessDuplicateDocIds, db]);
+
   useEffect(() => {
     let unsubscribe: Unsubscribe | null = null;
     if (db && user) {
@@ -149,11 +162,15 @@ export default function FirebaseProvider({
         (snapshot) => {
           const results: StoredSearchResult[] = [];
           const uniqueResultIds = new Set();
+          const duplicateDocIds: string[] = [];
           snapshot.forEach((doc) => {
             // doc.data() is never undefined for query doc snapshots
             const data = doc.data();
             // Second layer protection in case you get duplicates in Firebase
-            if (uniqueResultIds.has(data.result.id)) return;
+            if (uniqueResultIds.has(data.result.id)) {
+              duplicateDocIds.push(doc.id);
+              return;
+            }
             results.push({
               id: doc.id,
               added: data.added.toDate(),
@@ -163,6 +180,9 @@ export default function FirebaseProvider({
             uniqueResultIds.add(data.result.id);
           });
           setList(results);
+          if (duplicateDocIds.length > 0) {
+            setExcessDuplicateDocIds(duplicateDocIds);
+          }
         },
         (err) => {
           if (err instanceof Error) {
