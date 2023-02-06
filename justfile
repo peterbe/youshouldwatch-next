@@ -34,3 +34,8 @@ test:
 
 emulate:
     pnpm run emulate
+
+
+upgrade:
+    pnpm install
+    pnpm up -i --latest
