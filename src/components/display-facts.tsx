@@ -64,6 +64,15 @@ export function Facts({
           })}
         </p>
       )}
+
+      {result.first_air_date && (
+        <p>
+          <b>First air date</b>
+          <span>{result.first_air_date}</span>{" "}
+          <YearsAgo date={result.first_air_date} />
+        </p>
+      )}
+
       {result.release_date && (
         <p>
           <b>Release date</b>
@@ -138,6 +147,17 @@ function YearsAgo({ date }: { date: string }) {
   const ageMinutes = Math.abs(ageSeconds) / 60;
   const ageHours = ageMinutes / 60;
   const ageDays = ageHours / 24;
+  const ageWeeks = ageDays / 7;
+
+  if (ageWeeks < 4) {
+    const weeks = Math.floor(ageWeeks);
+    return (
+      <span className={styles.years_ago}>
+        {future && "in "}
+        {weeks} week{weeks !== 1 ? "s" : ""} {!future && "ago"}
+      </span>
+    );
+  }
   if (ageDays < 30) {
     return (
       <span className={styles.years_ago}>
