@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ReactNode } from "react";
 
 import type { Genre, SearchResult, Config } from "../types";
 import styles from "./display.module.css";
@@ -149,6 +150,18 @@ function YearsAgo({ date }: { date: string }) {
   const ageDays = ageHours / 24;
   const ageWeeks = ageDays / 7;
 
+  if (ageDays < 1) {
+    return <span className={styles.years_ago}>today!</span>;
+  }
+  if (ageDays < 7) {
+    const days = Math.floor(ageDays);
+    return (
+      <span className={styles.years_ago}>
+        {future && "in "}
+        {days} day{days !== 1 ? "s" : ""} {!future && "ago"}
+      </span>
+    );
+  }
   if (ageWeeks < 4) {
     const weeks = Math.floor(ageWeeks);
     return (
