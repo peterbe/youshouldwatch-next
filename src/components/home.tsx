@@ -16,7 +16,14 @@ type Props = {
 export function Home({ config, genres }: Props) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
-  const { user, list, listArchive, isLoading } = useContext(FirebaseContext);
+  const {
+    user,
+    list,
+    listArchive,
+    isLoading,
+    globalListCount,
+    globalListArchiveCount,
+  } = useContext(FirebaseContext);
 
   const showListArchive = searchParams.get("show") === "archive";
 
@@ -69,6 +76,13 @@ export function Home({ config, genres }: Props) {
       )}
 
       {!user && !showList.length && <HowItWorks />}
+
+      {globalListCount !== null && globalListArchiveCount !== null && (
+        <AboutGlobalListCount
+          listCount={globalListCount}
+          listArchiveCount={globalListArchiveCount}
+        />
+      )}
     </div>
   );
 }
@@ -170,6 +184,50 @@ function HowItWorks() {
           <h4 className={font.className}>Come back here, check it off</h4>
         </li>
       </ol>
+    </article>
+  );
+}
+
+function AboutGlobalListCount({
+  listCount,
+  listArchiveCount,
+}: {
+  listCount: number;
+  listArchiveCount: number;
+}) {
+  return (
+    <article>
+      <p>
+        Total number of movies or TV shows by <i>all</i> signed-in users on this
+        site...
+      </p>
+      <div className="grid">
+        <div>
+          <p style={{ fontSize: "150%" }} className={font.className}>
+            Added to list:
+          </p>
+          <p
+            style={{ fontSize: "500%", textAlign: "center" }}
+            className={font.className}
+            data-testid="list-count"
+          >
+            {(listCount + listArchiveCount).toLocaleString()}
+          </p>
+        </div>
+        <div>
+          <p style={{ fontSize: "150%" }} className={font.className}>
+            Checked off:
+          </p>
+          <p
+            style={{ fontSize: "500%", textAlign: "center" }}
+            className={font.className}
+            data-testid="list-archive-count"
+          >
+            {listArchiveCount.toLocaleString()}
+          </p>
+        </div>
+      </div>
+      <p>Spread the word and help these numbers reach 1,000! ...each.</p>
     </article>
   );
 }
