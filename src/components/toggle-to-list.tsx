@@ -36,7 +36,7 @@ export function ToggleToList({
         }
         if (onListAlready) {
           removeFromList(copy).then(() => {
-            triggerParty(event.target as HTMLElement);
+            triggerParty(event.target as HTMLElement, "sparkles");
           });
         } else {
           addToList(copy).then(() => {

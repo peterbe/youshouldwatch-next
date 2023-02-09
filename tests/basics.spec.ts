@@ -238,3 +238,25 @@ test("searching for a tv show, adding it to list, and go to from home page", asy
     /You Should Watch: Robert Montgomery Presents/
   );
 });
+
+test("test", async ({ page }) => {
+  await page.goto(BASE_URL);
+
+  await googleAuth(page);
+  await page.getByTestId("home-link").nth(0).click();
+  const countBefore = await page.getByTestId("list-count").innerText();
+  await page.getByTestId("nav-add").click();
+  await page.getByTestId("add-search").click();
+  await page.getByTestId("add-search").fill("disaster");
+  await page
+    .getByRole("article")
+    .filter({
+      hasText: "Disaster!",
+    })
+    .getByTestId("display-toggle")
+    .click();
+  await page.getByTestId("home-link").click();
+  await expect(page.getByTestId("list-count")).toHaveText(
+    `${parseInt(countBefore) + 1}`
+  );
+});

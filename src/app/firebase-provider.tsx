@@ -1,7 +1,7 @@
 "use client";
-import { createContext, useEffect, useState } from "react";
+import { createContext, useCallback, useEffect, useState } from "react";
 import { initializeApp } from "firebase/app";
-import { Firestore, Unsubscribe } from "firebase/firestore";
+import { Firestore, getCountFromServer, Unsubscribe } from "firebase/firestore";
 import {
   getFirestore,
   onSnapshot,
@@ -61,6 +61,8 @@ type Interface = {
   isLoading: boolean;
   firebaseError: Error | null;
   resetFirebaseError: () => void;
+  globalListArchiveCount: null | number;
+  globalListCount: null | number;
 };
 export const FirebaseContext = createContext<Interface>({
   user: null,
@@ -74,6 +76,8 @@ export const FirebaseContext = createContext<Interface>({
   isLoading: true,
   firebaseError: null,
   resetFirebaseError: async () => {},
+  globalListArchiveCount: null,
+  globalListCount: null,
 });
 
 export default function FirebaseProvider({
@@ -239,6 +243,22 @@ export default function FirebaseProvider({
     };
   }, [db, user]);
 
+  const [globalListCount, setGlobalListCount] = useState<number | null>(null);
+  const [globalListArchiveCount, setGlobalListArchiveCount] = useState<
+    number | null
+  >(null);
+
+  const refreshGlobalCounts = useCallback(() => {
+    if (db && user) {
+      getCountFromServer(collection(db, "list")).then((snapshot) => {
+        setGlobalListCount(snapshot.data().count);
+      });
+      getCountFromServer(collection(db, "listarchive")).then((snapshot) => {
+        setGlobalListArchiveCount(snapshot.data().count);
+      });
+    }
+  }, [db, user]);
+
   useEffect(() => {
     if (user && db && temporaryList.length > 0) {
       const batch = writeBatch(db);
@@ -255,12 +275,17 @@ export default function FirebaseProvider({
         .commit()
         .then(() => {
           clearTemporaryList();
+          refreshGlobalCounts();
         })
         .catch((err) => {
           setError(err);
         });
     }
   }, [user, db, temporaryList]);
+
+  useEffect(() => {
+    refreshGlobalCounts();
+  }, [db, user, refreshGlobalCounts]);
 
   const listIds = list.map((x) => x.result.id);
   const remaining = temporaryList.filter((x) => !listIds.includes(x.result.id));
@@ -284,7 +309,9 @@ export default function FirebaseProvider({
             added: new Date(),
             result,
           })
-            .then(() => {})
+            .then(() => {
+              refreshGlobalCounts();
+            })
             .catch((err) => {
               if (err instanceof Error) {
                 setError(err);
@@ -326,13 +353,17 @@ export default function FirebaseProvider({
               uid: user.uid,
               added: new Date(),
               result,
-            }).catch((err) => {
-              if (err instanceof Error) {
-                setError(err);
-              } else {
-                throw err;
-              }
-            });
+            })
+              .then(() => {
+                refreshGlobalCounts();
+              })
+              .catch((err) => {
+                if (err instanceof Error) {
+                  setError(err);
+                } else {
+                  throw err;
+                }
+              });
           })
           .catch((err) => {
             if (err instanceof Error) {
@@ -358,6 +389,8 @@ export default function FirebaseProvider({
     resetFirebaseError: () => {
       setError(null);
     },
+    globalListCount,
+    globalListArchiveCount,
   };
 
   return (

@@ -39,3 +39,6 @@ emulate:
 upgrade:
     pnpm install
     pnpm up -i --latest
+
+playwright-codegen:
+    pnpm dlx playwright codegen
