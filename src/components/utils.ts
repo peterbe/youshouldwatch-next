@@ -30,6 +30,7 @@ export function detailsToSearchResult(
   if (details.biography) result.biography = details.biography;
   if (details.birthday) result.birthday = details.birthday;
   if (details.deathday) result.deathday = details.deathday;
+  if (details.first_air_date) result.first_air_date = details.first_air_date;
 
   Object.entries(result).forEach(([key, value]) => {
     if (value === undefined) {
