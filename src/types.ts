@@ -118,6 +118,7 @@ export type MediaDetails = Genres & {
   production_companies: _ProductionCompany[];
   production_countries: _ProductionCountry[];
   release_date: string;
+  first_air_date?: string;
   revenue?: number;
   runtime: number | null;
   spoken_languages: _SpokenLanguage[];
