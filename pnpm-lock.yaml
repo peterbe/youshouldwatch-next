@@ -1,7 +1,6 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@next/font': 13.2.0
   '@picocss/pico': 1.5.7
   '@playwright/test': 1.31.1
   '@types/node': 18.14.1
@@ -26,7 +25,6 @@ specifiers:
   typescript: 4.9.5
 
 dependencies:
-  '@next/font': 13.2.0
   '@picocss/pico': 1.5.7
   '@types/node': 18.14.1
   '@types/react': 18.0.28
@@ -720,10 +718,6 @@ packages:
     resolution: {integrity: sha512-/UW29MPgX5P1J1AVIj9g1TCv4BKzUTBB54wgtEp7X15pEKerACGYv9iny44KGZxSJDizWD2+Zaw6+E7do4kwRA==}
     dependencies:
       glob: 7.1.7
-    dev: false
-
-  /@next/font/13.2.0:
-    resolution: {integrity: sha512-pWoegIxqegV+9+gFmRCZao6xhA2m3kKS34lMXqShJ5ibRuyHkP/tfDE82LzYZmVQ3p51ZrkwTugNwy/ohiE2cA==}
     dev: false
 
   /@next/swc-android-arm-eabi/13.2.0:

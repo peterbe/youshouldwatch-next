@@ -14,7 +14,6 @@
     "prepare": "husky install"
   },
   "dependencies": {
-    "@next/font": "13.2.0",
     "@picocss/pico": "1.5.7",
     "@types/node": "18.14.1",
     "@types/react": "18.0.28",
