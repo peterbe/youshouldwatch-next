@@ -5,14 +5,14 @@ import { useEffect, useState } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import useSWR from "swr";
 
-import { useDebounce } from "../app/hooks";
+import { useDebounce } from "@/app/hooks";
 import type {
   Config,
   Genre,
   Languages,
   SearchResults,
   SearchType,
-} from "../types";
+} from "@/types";
 
 import { font } from "./font";
 import { DisplaySearchResults } from "./display-search-result";

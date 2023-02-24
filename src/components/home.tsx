@@ -4,9 +4,9 @@ import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 
 import { font } from "./font";
-import { FirebaseContext } from "../app/firebase-provider";
+import { FirebaseContext } from "@/app/firebase-provider";
 import { DisplayResult } from "./display-search-result";
-import type { StoredSearchResult, Config, Genre } from "../types";
+import type { StoredSearchResult, Config, Genre } from "@/types";
 
 type Props = {
   config: Config;

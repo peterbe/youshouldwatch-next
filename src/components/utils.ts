@@ -1,4 +1,4 @@
-import type { MediaDetails, SearchResult } from "../types";
+import type { MediaDetails, SearchResult } from "@/types";
 export function detailsToSearchResult(
   details: MediaDetails,
   mediaType: string

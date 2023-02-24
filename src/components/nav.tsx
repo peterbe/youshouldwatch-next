@@ -2,7 +2,7 @@
 import Link from "next/link";
 
 import { useContext } from "react";
-import { FirebaseContext } from "../app/firebase-provider";
+import { FirebaseContext } from "@/app/firebase-provider";
 import styles from "./nav.module.css";
 
 export function Nav() {

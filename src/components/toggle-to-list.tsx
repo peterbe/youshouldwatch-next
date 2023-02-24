@@ -1,7 +1,7 @@
 import { useContext } from "react";
 
-import { FirebaseContext } from "../app/firebase-provider";
-import type { MediaType, SearchResult } from "../types";
+import { FirebaseContext } from "@/app/firebase-provider";
+import type { MediaType, SearchResult } from "@/types";
 import { triggerParty } from "./party";
 
 export function ToggleToList({

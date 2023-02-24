@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import useSWR, { mutate } from "swr";
 import { useContext } from "react";
 
-import type { SearchResult, SearchResults } from "../types";
+import type { SearchResult, SearchResults } from "@/types";
 import { DisplayError } from "./display-error";
-import { FirebaseContext } from "../app/firebase-provider";
+import { FirebaseContext } from "@/app/firebase-provider";
 import { fetcher } from "./utils";
 
 export function CorruptMedia({ result }: { result: SearchResult }) {

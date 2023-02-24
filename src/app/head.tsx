@@ -1,5 +1,5 @@
 import DefaultTags from "./default-tags";
-import { BASE_URL } from "../lib/constants";
+import { BASE_URL } from "@/lib/constants";
 
 export default function Head() {
   return (

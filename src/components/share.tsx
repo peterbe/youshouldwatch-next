@@ -1,5 +1,5 @@
 "use client";
-import type { Config, MediaType, MediaDetails, Genre } from "../types";
+import type { Config, MediaType, MediaDetails, Genre } from "@/types";
 
 import { font } from "./font";
 import { PosterImage } from "./poster-image";

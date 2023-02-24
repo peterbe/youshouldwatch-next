@@ -1,7 +1,6 @@
 import Link from "next/link";
-import { ReactNode } from "react";
 
-import type { Genre, SearchResult, Config } from "../types";
+import type { Genre, SearchResult, Config } from "@/types";
 import styles from "./display.module.css";
 import { PosterImage } from "./poster-image";
 

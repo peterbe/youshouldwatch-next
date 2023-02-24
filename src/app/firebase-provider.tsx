@@ -25,8 +25,8 @@ import {
   connectAuthEmulator,
 } from "firebase/auth";
 
-import type { SearchResult, StoredSearchResult } from "../types";
-import { rememberLastLogin } from "../components/utils";
+import type { SearchResult, StoredSearchResult } from "@/types";
+import { rememberLastLogin } from "@/components/utils";
 import { useTemporaryList } from "./use-temporary-list";
 
 const EMULATE_FIREBASE = Boolean(

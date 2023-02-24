@@ -1,5 +1,5 @@
 import Image from "next/image";
-import type { Config, MediaDetails, SearchResult } from "../types";
+import type { Config, MediaDetails, SearchResult } from "@/types";
 import styles from "./poster.module.css";
 
 export function PosterImage({

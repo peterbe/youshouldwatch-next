@@ -1,7 +1,7 @@
 import copy from "copy-to-clipboard";
 
 import { useEffect, useState } from "react";
-import type { SearchResult } from "../types";
+import type { SearchResult } from "@/types";
 import { triggerParty } from "./party";
 
 function canShare() {
