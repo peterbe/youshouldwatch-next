@@ -1,9 +1,9 @@
 import { notFound } from "next/navigation";
 
-import DefaultTags from "../../../default-tags";
-import type { MediaType } from "../../../../types";
-import { getConfig, getDetails } from "../../../../lib/themoviedb";
-import { BASE_URL } from "../../../../lib/constants";
+import DefaultTags from "@/app/default-tags";
+import type { MediaType } from "@/types";
+import { getConfig, getDetails } from "@/lib/themoviedb";
+import { BASE_URL } from "@/lib/constants";
 
 export default async function Head({
   params,

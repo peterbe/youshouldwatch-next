@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
 import { GoogleAuthProvider, signInWithRedirect } from "firebase/auth";
 
-import { FirebaseContext } from "../app/firebase-provider";
+import { FirebaseContext } from "@/app/firebase-provider";
 import { font } from "./font";
 import { GoBackHome } from "./go-back-home";
 import { getLastLogin } from "./utils";

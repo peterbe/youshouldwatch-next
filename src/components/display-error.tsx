@@ -15,7 +15,7 @@ export function DisplayError({
   const pathname = usePathname();
   const searchParams = useSearchParams();
   let reloadURL = pathname;
-  if (searchParams.toString()) {
+  if (searchParams && searchParams.toString()) {
     reloadURL += `?${searchParams}`;
   }
 

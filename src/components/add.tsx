@@ -5,14 +5,14 @@ import { useEffect, useState } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import useSWR from "swr";
 
-import { useDebounce } from "../app/hooks";
+import { useDebounce } from "@/app/hooks";
 import type {
   Config,
   Genre,
   Languages,
   SearchResults,
   SearchType,
-} from "../types";
+} from "@/types";
 
 import { font } from "./font";
 import { DisplaySearchResults } from "./display-search-result";
@@ -48,10 +48,10 @@ function Form({
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const initialSearch = searchParams.get("search");
+  const initialSearch = searchParams && searchParams.get("search");
   const [search, setSearch] = useState(initialSearch || "");
   const debouncedSearch = useDebounce(search, 200);
-  const initialSearchType = searchParams.get("type");
+  const initialSearchType = searchParams && searchParams.get("type");
   const [searchType, setSearchType] = useState<SearchType>(
     initialSearchType === "movie" ||
       initialSearchType === "tv" ||
@@ -63,7 +63,7 @@ function Form({
   const [language, setLanguage] = useState("");
 
   useEffect(() => {
-    const sp = new URLSearchParams(searchParams);
+    const sp = new URLSearchParams(searchParams || {});
     if (searchType) {
       if (sp.get("type") !== searchType) {
         if (sp.get("type") && !searchType) {
@@ -124,7 +124,7 @@ function Form({
           onChange={(e) => setSearch(e.target.value)}
           data-testid="add-search"
           onBlur={() => {
-            const existing = searchParams.get("search") || "";
+            const existing = (searchParams && searchParams.get("search")) || "";
             if (search !== existing) {
               const sp = new URLSearchParams({ search });
               if (searchType) {

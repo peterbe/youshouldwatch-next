@@ -4,9 +4,9 @@ import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 
 import { font } from "./font";
-import { FirebaseContext } from "../app/firebase-provider";
+import { FirebaseContext } from "@/app/firebase-provider";
 import { DisplayResult } from "./display-search-result";
-import type { StoredSearchResult, Config, Genre } from "../types";
+import type { StoredSearchResult, Config, Genre } from "@/types";
 
 type Props = {
   config: Config;
@@ -25,7 +25,8 @@ export function Home({ config, genres }: Props) {
     globalListArchiveCount,
   } = useContext(FirebaseContext);
 
-  const showListArchive = searchParams.get("show") === "archive";
+  const showListArchive =
+    searchParams && searchParams.get("show") === "archive";
 
   let toggleShowArchiveURL = pathname || ".";
   if (!showListArchive) {
@@ -60,7 +61,7 @@ export function Home({ config, genres }: Props) {
           results={showList}
           config={config}
           genres={genres}
-          isArchive={showListArchive}
+          isArchive={Boolean(showListArchive)}
         />
       )}
 

@@ -1,8 +1,8 @@
 import { notFound } from "next/navigation";
-import { Share } from "../../../../components/share";
+import { Share } from "@/components/share";
 
-import type { MediaType } from "../../../../types";
-import { getConfig, getDetails, getGenres } from "../../../../lib/themoviedb";
+import type { MediaType } from "@/types";
+import { getConfig, getDetails, getGenres } from "@/lib/themoviedb";
 
 export default async function Page({
   params,

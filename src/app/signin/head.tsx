@@ -1,4 +1,4 @@
-import DefaultTags from "../default-tags";
+import DefaultTags from "@/app/default-tags";
 
 export default function Head() {
   return (

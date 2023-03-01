@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type { StoredSearchResult } from "../types";
+import type { StoredSearchResult } from "@/types";
 
 const STORAGE_KEY = "temporaryList";
 

@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { search, getAllDetails } from "../../../lib/themoviedb";
-import { MediaType } from "../../../types";
+import { search, getAllDetails } from "@/lib/themoviedb";
+import { MediaType } from "@/types";
 
 export default async function handler(
   req: NextApiRequest,

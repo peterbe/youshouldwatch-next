@@ -52,11 +52,11 @@ jobs:
       - name: Pretty?
         run: pnpm run prettier:check
 
-      - name: TypeScript?
-        run: pnpm run tsc
-
       - name: Run lint
         run: pnpm run lint
+
+      - name: TypeScript?
+        run: pnpm run tsc
 
       - name: Cache Next build
         uses: actions/cache@v3
